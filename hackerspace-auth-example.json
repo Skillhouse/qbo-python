@@ -1,6 +1,6 @@
 
 {
     
-    token : "No this is not my QBO token. Copy this file to .., rename it so it no longer says -example, and put your token in place of this string.  ",
+    "token" : "No this is not my QBO token. Copy this file to .., rename it so it no longer says -example, and put your token in place of this string.  "
 
 }

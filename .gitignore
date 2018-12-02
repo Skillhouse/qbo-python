@@ -1,3 +1,8 @@
+# Wow their default ignores for python are broad.
+#  But no emacsitude?  For shame.
+*~
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

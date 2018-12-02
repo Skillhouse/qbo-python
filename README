@@ -1,3 +1,21 @@
 
 
-So I'm pretty sure I'm set up to push from here...
+
+This is scaffolding, construction vehicles intended to be driven by
+trained professionals, on a construction site.  If you drive it around
+your neighborhood, please don't be cross when you take out someone's
+birdhouse or garage.
+
+.... Once upon a time we did stripe into Gnucash.  Now we're doing
+quickbooks.  I'm trying to bludgeon some code in the orbit of the
+OAUTH quickbooks world, into shape such that it can do a similar
+function for us.
+
+All of the stripe-to-quickbooks things I've played with so far are
+just plain in the way.
+
+Sush.io in particular can go die in a fire.  "Sales receipts" ?  Yeah,
+we can do double entry, but ... why?... BECAUSE THAT'S WHAT ACCOUNTING
+IS ABOUT?
+
+Anyway.  I figured I owed you a readme. Here 'tis.

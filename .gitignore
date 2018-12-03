@@ -2,6 +2,9 @@
 #  But no emacsitude?  For shame.
 *~
 
+# Virtualenv.
+qbo-venv/
+
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

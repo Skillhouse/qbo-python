@@ -1,6 +1,7 @@
 
 
 import json
+import re;
 
 
 
@@ -12,5 +13,13 @@ def get_auth_bag():
         return json.load(authfile)
 
 
-
-
+stripepat = re.compile(r"^stripe: *(?P<custid>.+)$",re.MULTILINE)
+    
+def extract_stripecust_from_notes(innotes):
+    result = stripepat.search(innotes)
+    if result is None:
+        return "[NO STRIPE CUST]"
+    else:
+        return result.group('custid')
+    
+    

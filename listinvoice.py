@@ -16,7 +16,6 @@ payload="select * from invoice startposition 1 maxresults 5"
 Token = authbag['token'];
 
 headers = {
-    'User-Agent': "QBOV3-OAuth2-Postman-Collection",
     'Accept': "application/json",
     'Content-Type': "application/text",
     'Authorization': "Bearer "+Token,

@@ -21,11 +21,10 @@ invoiceItem = {
 
 
 InvoiceLine = {
-    "Amount"     : 101.00,
+    "Amount"     : 35.00,
     "DetailType" : "SalesItemLineDetail",
     "SalesItemLineDetail": { "ItemRef": invoiceItem  }
     }
-
 
 invoice = { "CustomerRef": { "value": 58},
             "Line" : [
@@ -34,6 +33,8 @@ invoice = { "CustomerRef": { "value": 58},
             }
 
 payload = json.dumps(invoice,indent=4,sort_keys=True)
+
+print(payload)
 
 headers = {
     'User-Agent': "QBOV3-OAuth2-Postman-Collection",

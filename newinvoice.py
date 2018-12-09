@@ -37,12 +37,10 @@ payload = json.dumps(invoice,indent=4,sort_keys=True)
 print(payload)
 
 headers = {
-    'User-Agent': "QBOV3-OAuth2-Postman-Collection",
     'Accept': "application/json",
     'Content-Type': "application/json",
     'Authorization': "Bearer "+Token,
     'Cache-Control': "no-cache",
-    'Postman-Token': "93f5ea65-5a55-496d-87ef-4b1e9c5859ec"
     }
 
 response = requests.request("POST", url, data=payload, headers=headers, params=querystring)

@@ -115,23 +115,56 @@ blankpayment = {
 
 
 
-#{
-#    "TxnId": "150", 
-#    "TxnType": "Invoice"
-#}
+
+blanktransfer ={
+    "Amount": "1.95",
+    "ToAccountRef": {
+        "value": "158"
+    }, 
+    "FromAccountRef": {
+        "value": "124"
+    }
+}
 
 
 
-def makeStripePayment(bag,stripebag):
+blankpurchase = {
+  "PaymentType": "Cash", 
+  "AccountRef": {
+    "name": "Undeposited Funds", 
+    "value": 124
+  }, 
+  "Line": [
+    {
+      "DetailType": "AccountBasedExpenseLineDetail", 
+      "Amount": 2.34, 
+      "AccountBasedExpenseLineDetail": {
+        "AccountRef": {
+          "name": "Stripe Fees", 
+          "value": 166
+        }
+      }
+    }
+  ]
+}
+
+
+
+
+
+
+def makeStripePayment(customer,stripeinfo):
 
     payment = copy.deepcopy(blankpayment);
 
-    payment['CustomerRef']['value'] = int(bag['QBOID'])
+    payment['CustomerRef']['value'] = int(customer['QBOID'])
 
-    payment['TotalAmt'] = payment['UnappliedAmt'] = stripebag['amount']
+    payment['TotalAmt'] = payment['UnappliedAmt'] = stripeinfo['amount']
 
-    payment['PaymentRefNum'] = stripebag['paymentref']
-
+    payment['PaymentRefNum'] = stripeinfo['paymentref']
+    
+    payment['TxnDate'] = stripeinfo['transaction_date']
+    
     return payment
     
 
@@ -206,16 +239,103 @@ def record_payment(payment):
 
 
 
+def record_transfer(amount,src,dest,tdate):
+    url = "https://sandbox-quickbooks.api.intuit.com/v3/company/123146047051614/transfer"
+    querystring = {"minorversion":"14"}
 
 
-def record_invoice(bag):
+    transfer = copy.deepcopy(blanktransfer)
+
+    transfer['Amount'] = amount
+    transfer['ToAccountRef']['value'] = int(dest)
+    transfer['FromAccountRef']['value'] = int(src)
+    transfer['TxnDate'] = tdate.isoformat()
+    
+    payload = json.dumps(transfer,indent=4,sort_keys=True)
+
+    print(payload)
+
+    import pdb; pdb.set_trace()
+    
+    headers = {
+        'Accept': "application/json",
+        'Content-Type': "application/json",
+        'Authorization': "Bearer "+Token,
+        'Cache-Control': "no-cache",
+    }
+
+    response = requests.request("POST", url, data=payload, headers=headers, params=querystring)
+
+    resj = json.loads(response.text);
+
+    if("Fault" in resj):
+        print(json.dumps(resj,sort_keys=True,indent=4))
+        raise(Exception("Failed to record transfer"))
+
+    return resj
+
+
+def record_purchase(amount,src,dest,tdate,custref,description):
+
+    # Purchases are _us_ buying things, we're spending money. 
+
+    url = "https://sandbox-quickbooks.api.intuit.com/v3/company/123146047051614/purchase"
+    querystring = {"minorversion":"14"}
+
+
+    item = copy.deepcopy(blankpurchase)
+
+    lineitem = { "DetailType": "AccountBasedExpenseLineDetail",
+                 "Amount": amount,
+                 "Description" : description,
+                 "AccountBasedExpenseLineDetail": {
+                     "AccountRef"  : { "value": dest },
+                     "CustomerRef" : { "value": custref  },
+                 } }
+
+
+    
+    item['Line'] = [ lineitem ]
+    
+    item['AccountRef'] = { 'value': src}
+    
+    item['TxnDate'] = tdate.isoformat()
+
+
+    payload = json.dumps(item,indent=4,sort_keys=True)
+
+    print(payload)
+
+    import pdb; pdb.set_trace()
+    
+    headers = {
+        'Accept': "application/json",
+        'Content-Type': "application/json",
+        'Authorization': "Bearer "+Token,
+        'Cache-Control': "no-cache",
+    }
+
+    response = requests.request("POST", url, data=payload, headers=headers, params=querystring)
+
+    resj = json.loads(response.text);
+
+    if("Fault" in resj):
+        print(json.dumps(resj,sort_keys=True,indent=4))
+        raise(Exception("Failed to record purchase"))
+
+    return resj
+
+
+
+
+def record_invoice(custrow):
     
     url = "https://sandbox-quickbooks.api.intuit.com/v3/company/123146047051614/invoice"
     querystring = {"minorversion":"14"}
 
     print(blankinvoice)
     
-    invoice = build_invoice({'customer': bag['QBOID'],'amount':35.00 })
+    invoice = build_invoice({'customer': custrow['QBOID'],'amount':35.00 })
 
     payload = json.dumps(invoice,indent=4,sort_keys=True)
 

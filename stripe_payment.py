@@ -6,7 +6,8 @@ import hackerspace_utils as hu
 import qbo_utils as qu;
 import pandas as pd;
 import sys
-
+import time
+from datetime import date
 
 
 # Export the Master Member List as csv, and put it here.
@@ -32,6 +33,9 @@ subset = subset.fillna("")
 debug = True
 
 
+p_cfg = hu.get_paymentconfig()['stripe']
+
+
 
 index=1
 row=subset.iloc[[index]]
@@ -39,23 +43,31 @@ row=subset.iloc[[index]]
 custID = row['QBOID']
 
 
-stripebag={
+stripeinfo={
     'amount'     : 70.00,
-    'paymentref' : "pmt_123123123123", 
+    'paymentref' : "pmt_123123123123",
+    'transaction_date' = date.today()
     }
 
 
-paymentconfig = hu.get_paymentconfig()['stripe']
 
-import pdb; pdb.set_trace()
+payment = qu.makeStripePayment(row,stripeinfo)
 
-payment = qu.makeStripePayment(row,stripebag)
-
-payment['DepositToAccountRef'] = {'value':paymentconfig['payment_account']}
+payment['DepositToAccountRef'] = {'value':p_cfg['payment_account']}
 
 qu.addInvoicesToPaymentUntilYouChoke(payment)
 
 print(json.dumps(payment,indent=4,sort_keys=True))
+
+# qu.record_transfer(1.95 ,124 ,158 ,date.today())
+
+qu.record_purchase(amount=1.09,
+                   src   =  p_cfg['payment_account'],
+                   dest  =  p_cfg['fee_account'],
+                   tdate =  stripeinfo['transaction_date']
+                   custref=int(custID) ,
+                   description="Stripe fees for payment {paymentref}".format(**stripeinfo))
+
 
 # response = qu.record_payment(payment);
 

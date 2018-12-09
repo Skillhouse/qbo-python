@@ -358,12 +358,12 @@ def record_invoice(custrow):
 
     return resj
     
-def create_cust(custbag):
+def create_cust(custrow):
 
     url = "https://sandbox-quickbooks.api.intuit.com/v3/company/123146047051614/customer"
     querystring = {"minorversion":"14"}
 
-    newcust = build_cust(custbag)
+    newcust = build_cust(custrow)
 
     payload = json.dumps(newcust,sort_keys=True,indent=4)
 

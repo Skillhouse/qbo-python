@@ -37,8 +37,7 @@ for index, row in subset.iterrows():
 
     cust = None
 
-    invoice = qu.create_invoice(row)
-
+    invoice = qu.record_invoice(row)
     print(json.dumps(invoice,indent=4,sort_keys=True))
     
     

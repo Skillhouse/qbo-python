@@ -205,7 +205,7 @@ def record_payment(payment):
 
 
 
-def create_invoice(bag):
+def record_invoice(bag):
     
     url = "https://sandbox-quickbooks.api.intuit.com/v3/company/123146047051614/invoice"
     querystring = {"minorversion":"14"}

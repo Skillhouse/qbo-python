@@ -21,12 +21,12 @@ invoiceItem = {
 
 
 InvoiceLine = {
-    "Amount"     : 35.00,
+    "Amount"     : 200.00,
     "DetailType" : "SalesItemLineDetail",
     "SalesItemLineDetail": { "ItemRef": invoiceItem  }
     }
 
-invoice = { "CustomerRef": { "value": 58},
+invoice = { "CustomerRef": { "value": 66},
             "Line" : [
                 InvoiceLine
                 ]

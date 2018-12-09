@@ -4,6 +4,9 @@ import requests
 import json
 import hackerspace_utils as hu
 import sys
+import copy
+
+from operator import itemgetter
 
 
 authbag = hu.get_auth_bag()
@@ -74,42 +77,111 @@ blankinvoice = { "CustomerRef": { "value": 58},
 
 
 blankpayment = {
-    "TotalAmt": 25.0, 
-    "PaymentRefNum" : "LookMaRef",
+    "TotalAmt": 0.0, 
+    "UnappliedAmt": 0.0,
+    "PaymentRefNum" : "NeedToSetThis",
     "ProcessPayment": True,
     "CustomerRef": {
-    "value": "66"
+    "value": "-1"
     },
     "Line":
     [
       {
-        "Amount": 5.0, 
+        "Amount": 0.0, 
         "LineEx": {
           "any": [ ]
         }, 
         "LinkedTxn": [
-          {
-            "TxnId": "150", 
-            "TxnType": "Invoice"
-          }
         ]
       }
     ]
 }
 
+blankpayment = {
+    "TotalAmt": 0.0, 
+    "UnappliedAmt": 0.0,
+    "PaymentRefNum" : "NeedToSetThis",
+    "ProcessPayment": True,
+    "CustomerRef": {
+    "value": "-1"
+    },
+    "Line":
+    [
+    ]
+}
 
-def create_payment(bag):
+
+
+#{
+#    "TxnId": "150", 
+#    "TxnType": "Invoice"
+#}
+
+
+
+def makeStripePayment(bag,stripebag):
+
+    payment = copy.deepcopy(blankpayment);
+
+    payment['CustomerRef']['value'] = int(bag['QBOID'])
+
+    payment['TotalAmt'] = payment['UnappliedAmt'] = stripebag['amount']
+
+    payment['PaymentRefNum'] = stripebag['paymentref']
+
+    return payment
+    
+
+
+
+def addInvoicesToPaymentUntilYouChoke(payment):
+
+    id=payment['CustomerRef']['value'];
+    
+    dcount = count_of_open_invoices_for_customer(id)
+
+    if(dcount <1):
+        # No open invoices.  We choke at the starting gate.
+        return(payment)
+
+    # Now we apply open invoices, until we run out of invoices or run
+    # out of payment balance.
+
+    
+    alist = query_open_invoices_for_customer(id)
+    
+    for item in sorted(alist, key=itemgetter('DueDate') )  :
+#        print( json.dumps(item,indent=4,sort_keys=True))
+
+
+        amtToThisInvoice = min(payment['UnappliedAmt'],item['Balance'])
+
+        txline = {"Amount": amtToThisInvoice,
+                  "LinkedTxn": [ {'TxnType': "Invoice",
+                                "TxnId": item['Id']} ]
+                  }
+
+        payment['Line'].append(txline)
+        
+        print ("Item: {0} Remaining: {1}  Amt: {2}".format(item['Balance'],payment['UnappliedAmt'],amtToThisInvoice));
+
+        payment['UnappliedAmt'] -= amtToThisInvoice
+        
+        if (  payment['UnappliedAmt'] <= 0 ) :
+            payment['UnappliedAmt'] = 0
+            break  # We're out of payment.
+
+    return(payment)
+
+
+
+def record_payment(payment):
     url = "https://sandbox-quickbooks.api.intuit.com/v3/company/123146047051614/payment"
     querystring = {"minorversion":"14"}
 
-
-    #     payment = build_payment({'customer': bag['QBOID'],'amount':35.00 })
-
-    payment = blankpayment
-    
     payload = json.dumps(payment,indent=4,sort_keys=True)
 
-    print(payload)
+#    print(payload)
     
     headers = {
         'Accept': "application/json",
@@ -277,3 +349,31 @@ def query(sql):
     resj = json.loads(response.text);
 
     return(resj)
+
+
+
+def count_of_open_invoices_for_customer(id):
+    sql="select count(*) from Invoice where CustomerRef = '{0}' AND Balance > '0.0'  startposition 1 maxresults 5".format(int(id))
+
+    resj=query(sql)
+
+    if("Fault" in resj):
+        print(json.dumps(resj,sort_keys=True,indent=4))
+        raise(Exception("invoice count query failed."))
+
+    return(resj['QueryResponse']['totalCount'])
+
+    
+
+def query_open_invoices_for_customer(id):
+    
+    sql="select * from Invoice where CustomerRef = '{0}' AND Balance > '0.0'  startposition 1 maxresults 5".format(int(id))
+
+    resj=query(sql)
+    
+    if("Fault" in resj):
+        print(json.dumps(resj,sort_keys=True,indent=4))
+        raise(Exception("invoice query failed."))
+    
+    return(resj['QueryResponse']['Invoice'])
+    

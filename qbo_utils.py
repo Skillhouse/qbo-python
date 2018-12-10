@@ -12,6 +12,9 @@ from datetime import date
 from operator import itemgetter
 
 
+debug = False
+
+
 authbag = hu.get_auth_bag()
 Token = authbag['token'];
 
@@ -154,6 +157,7 @@ blankpurchase = {
 
 
 def makeStripePayment(customer,stripeinfo):
+    import pdb; pdb.set_trace()
 
     payment = copy.deepcopy(blankpayment);
 
@@ -217,7 +221,6 @@ def record_payment(payment):
 
     payload = json.dumps(payment,indent=4,sort_keys=True)
 
-#    print(payload)
     
     headers = {
         'Accept': "application/json",
@@ -226,9 +229,15 @@ def record_payment(payment):
         'Cache-Control': "no-cache",
     }
 
-    response = requests.request("POST", url, data=payload, headers=headers, params=querystring)
+    resj={}
 
-    resj = json.loads(response.text);
+    if (debug):
+        print(payload)
+        
+    else: 
+        response = requests.request("POST", url, data=payload, headers=headers, params=querystring)
+
+        resj = json.loads(response.text);
 
     if("Fault" in resj):
         print(json.dumps(resj,sort_keys=True,indent=4))
@@ -293,7 +302,6 @@ def record_purchase(amount,src,dest,tdate,custref,description):
                      "CustomerRef" : { "value": custref  },
                  } }
 
-
     
     item['Line'] = [ lineitem ]
     
@@ -304,10 +312,8 @@ def record_purchase(amount,src,dest,tdate,custref,description):
 
     payload = json.dumps(item,indent=4,sort_keys=True)
 
-    print(payload)
 
-    import pdb; pdb.set_trace()
-    
+   
     headers = {
         'Accept': "application/json",
         'Content-Type': "application/json",
@@ -315,9 +321,13 @@ def record_purchase(amount,src,dest,tdate,custref,description):
         'Cache-Control': "no-cache",
     }
 
-    response = requests.request("POST", url, data=payload, headers=headers, params=querystring)
+    resj={}
 
-    resj = json.loads(response.text);
+    if (debug): 
+        print(payload)
+    else:    
+        response = requests.request("POST", url, data=payload, headers=headers, params=querystring)
+        resj = json.loads(response.text);
 
     if("Fault" in resj):
         print(json.dumps(resj,sort_keys=True,indent=4))

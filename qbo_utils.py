@@ -25,11 +25,11 @@ Token = authbag['token'];
 
 
 custfields = {
-    'name'    :  lambda d,v: d.update({'DisplayName':v}) ,
-    'notes'   :  lambda d,v: d.update({'Notes':v}) ,
-    'phone'   :  lambda d,v: d.update({'PrimaryPhone': {'FreeFormNumber': v}}) ,
-    'email'   :  lambda d,v: d.update({'PrimaryEmailAddr': {'Address': v}}) ,
-    'QBOID'   :  lambda d,v: d ,   # That's right, do nothing.
+    'name'      :  lambda d,v: d.update({'DisplayName':v}) ,
+    'phone'     :  lambda d,v: d.update({'PrimaryPhone': {'FreeFormNumber': v}}) ,
+    'email'     :  lambda d,v: d.update({'PrimaryEmailAddr': {'Address': v}}) ,
+    'QBOID'     :  lambda d,v: d ,   # No place in object
+    'stripe_id' :  lambda d,v: d ,   # No place in object
 }
 
 

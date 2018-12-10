@@ -103,13 +103,21 @@ def forward():
         
         if (row['QBOID'] == "" ):
             print("NO QBO for {name}".format(**row))
+
+            thisj = qu.build_cust(row)
+            
+            new = Customer.from_json(thisj)
+
+            new.save(qb=client)
+
+
+
         else:
             if (debug) :print("{name} has QBOID '{QBOID}'".format(**row))
             
 
             thiscust = Customer.get(int(row['QBOID']),qb=client)
             thisj = thiscust.to_json()
-            import pdb; pdb.set_trace()
 
         
     print("Evaluated '{0}' customers.".format(ccount))

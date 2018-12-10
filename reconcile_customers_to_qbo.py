@@ -27,9 +27,14 @@ import time
 import stripe;
 from datetime import date
 
+from quickbooks import Oauth2SessionManager
+from quickbooks import QuickBooks
+from quickbooks.objects.customer import Customer
+from quickbooks.objects import Account
 
-# Export the Master Member List as csv, and put it here.
 
+
+# Get data from the spreadsheet download
 
 cols_we_want = {
     "QBO ID"        : "QBOID",
@@ -41,17 +46,47 @@ cols_we_want = {
 
 all_cust = hu.all_cust_df(cols_we_want)
 
-stripe.api_key = hu.get_auth_bag()['stripe_keys']['live']
+
+# Connect to  QBO
 
 
-#
+authbag = hu.get_auth_bag()
+
+
+session_manager = Oauth2SessionManager(
+    client_id=authbag['realm'],
+    client_secret=authbag['secret'],
+    access_token=authbag['token'],
+    base_url=authbag['redirect'],
+)
+
+
+client = QuickBooks(
+     sandbox=True,
+     session_manager=session_manager,
+     company_id=authbag['realm']
+ )
+
+
+
+
+
+
+
+
+
+
 # Everyone in the spreadsheet should have a record in QBO, active or not. 
 #
 # Everyone in QBO should have a line in the spreadsheet. 
 #
 # If there's a conflict, we think that the spreadsheet should win.
 #
-#
+
+
+
+
+
 
 
 def forward():
@@ -62,15 +97,19 @@ def forward():
 
 
     for index,row in all_cust.iterrows():
-        import pdb; pdb.set_trace()
+
+        ccount += 1
+
         
         if (row['QBOID'] == "" ):
             print("NO QBO for {name}".format(**row))
         else:
             if (debug) :print("{name} has QBOID '{QBOID}'".format(**row))
             
-            
 
+            thiscust = Customer.get(int(row['QBOID']),qb=client)
+            thisj = thiscust.to_json()
+            import pdb; pdb.set_trace()
 
         
     print("Evaluated '{0}' customers.".format(ccount))

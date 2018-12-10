@@ -11,6 +11,11 @@ from datetime import date
 
 from operator import itemgetter
 
+from quickbooks import Oauth2SessionManager
+from quickbooks import QuickBooks
+from quickbooks.objects.customer import Customer
+from quickbooks.objects import Account
+
 
 debug = False
 

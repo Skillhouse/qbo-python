@@ -2,6 +2,7 @@
 
 import json
 import re;
+import pandas as pd;
 
 
 # What accounts do payments get recorded into?
@@ -30,3 +31,36 @@ def extract_stripecust_from_notes(innotes):
         return result.group('custid')
     
     
+
+
+
+csvin="../memberlist.csv"
+
+cols_we_want = {
+    "QBO ID"        : "QBOID",
+    "Name"          : "name",
+    "Email"         : 'email',
+    "Phone Number"  : 'phone',
+}
+
+
+def all_cust_df(colmap=cols_we_want):
+    
+    sheets = pd.read_csv(csvin,header=1)
+
+    sheets = sheets.filter(items=colmap.keys())
+
+    sheets = sheets.rename(axis="columns",mapper=colmap)                    
+
+    sheets = sheets.fillna("")
+
+    return(sheets)
+
+
+def active_cust_df(colmap=cols_we_want):
+
+    df = all_cust_df(colmap)
+
+    df = df.loc[sheets['STATUS'] == 'ACTIVE']
+
+    return df

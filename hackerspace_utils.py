@@ -46,21 +46,28 @@ cols_we_want = {
 
 def all_cust_df(colmap=cols_we_want):
     
-    sheets = pd.read_csv(csvin,header=1)
+    df = pd.read_csv(csvin,header=1)
 
-    sheets = sheets.filter(items=colmap.keys())
+    df = df.filter(items=colmap.keys())
 
-    sheets = sheets.rename(axis="columns",mapper=colmap)                    
+    df = df.rename(axis="columns",mapper=colmap)                    
 
-    sheets = sheets.fillna("")
+    df = df.fillna("")
 
-    return(sheets)
+    return(df)
 
 
 def active_cust_df(colmap=cols_we_want):
 
-    df = all_cust_df(colmap)
+    df = pd.read_csv(csvin,header=1)
 
-    df = df.loc[sheets['STATUS'] == 'ACTIVE']
+    df = df.loc[df['STATUS'] == 'ACTIVE']
 
-    return df
+    df = df.filter(items=colmap.keys())
+
+    df = df.rename(axis="columns",mapper=colmap)                    
+
+    df = df.fillna("")
+
+    return(df)
+

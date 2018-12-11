@@ -47,6 +47,7 @@ cols_we_want = {
 all_cust = hu.all_cust_df(cols_we_want)
 
 
+
 # Connect to  QBO
 
 
@@ -70,6 +71,33 @@ client = QuickBooks(
 
 
 
+def cust_iterable():
+
+    bitesize = 5
+    reps=0
+    yielded = 0
+    
+    while (True):
+
+        customers = Customer.filter(qb=client,
+                                    max_results=100,
+                                    start_position=yielded+1)
+        reps += 1
+
+        if len(customers) == 0:
+            return
+
+        for item in customers:
+#            if (debug): print("Reps: {0}.  Yielded: {1} bitecount: {2}".format(reps,yielded,len(customers)))
+
+            yielded += 1
+            yield(item)
+    
+
+
+
+
+
 
 
 
@@ -84,17 +112,46 @@ client = QuickBooks(
 #
 
 
+dispformat = "'{name}' : '{email}' : '{phone}' "
 
 
 
+def display_custrow(row):
 
+    return dispformat.format(**row)
+
+
+def cust2bag(cust):
+
+    bag = {}
+
+    bag['id'] = cust.Id
+    bag['name']  = cust.DisplayName
+
+    try:
+        bag['email'] = cust.PrimaryEmailAddr.Address
+    except AttributeError:
+        bag['email'] = ""
+
+    try:
+        bag['phone'] = cust.PrimaryPhone.FreeFormNumber
+    except AttributeError:
+        bag['phone'] = ""
+
+    return(bag)
+        
 
 def forward():
 
 
+    
+    
+    qbolist = pd.DataFrame([ cust2bag(cust) for cust in cust_iterable() ])  
+    
     ccount = 0;
     pcount = 0;
 
+#    all_cust['QBOID']="";
 
     for index,row in all_cust.iterrows():
 
@@ -102,24 +159,40 @@ def forward():
 
         
         if (row['QBOID'] == "" ):
-            print("NO QBO for {name}".format(**row))
+            print("Sheet has no QBO ID for {name}".format(**row))
 
-            thisj = qu.build_cust(row)
+            found_candidate = False
             
-            new = Customer.from_json(thisj)
+            print(display_custrow(row))
 
-            new.save(qb=client)
+            maybes = qbolist[(qbolist['email'] == row['email']) | (qbolist['name']==row['name'])]
+
+            if(len(maybes) > 0):
+                found_candidate = True
+                print("Candidate matches: ")
+                for index,cust in maybes.iterrows():
+                    print(display_custrow(cust)+" (QBO: {0})".format(cust['id']) )
 
 
+
+            if(found_candidate):
+                print("Candidates exist; not adding.")
+            else:
+                print("No prospective match; adding. ")
+                
+                thisj = qu.build_cust(row)
+                new = Customer.from_json(thisj)
+                newer = new.save(qb=client)
+                print(display_cust(newer)+" (QBO: {0})".format(newer.Id) )
 
         else:
             if (debug) :print("{name} has QBOID '{QBOID}'".format(**row))
-            
 
-            thiscust = Customer.get(int(row['QBOID']),qb=client)
-            thisj = thiscust.to_json()
+#            thiscust = Customer.get(int(row['QBOID']),qb=client)
+#            thisj = thiscust.to_json()
 
-        
+#            import pdb; pdb.set_trace()
+
     print("Evaluated '{0}' customers.".format(ccount))
     print("Found '{0}' problems.".format(pcount))
 

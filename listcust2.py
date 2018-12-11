@@ -66,9 +66,6 @@ def cust_iterable():
             return
 
         for item in customers:
-            if (debug): print("Reps: {0}.  Yielded: {1} bitecount: {2}".format(reps,yielded,len(customers)))
-        
-
             yielded += 1
             yield(item)
     

@@ -50,7 +50,7 @@ client = QuickBooks(
 
 def cust_iterable():
 
-    bitesize = 5
+    bitesize = 100
     reps=0
     yielded = 0
     
@@ -58,7 +58,7 @@ def cust_iterable():
 
         customers = Customer.filter(Active=True,
                                     qb=client,
-                                    max_results=100,
+                                    max_results=bitesize,
                                     start_position=yielded+1)
         reps += 1
 

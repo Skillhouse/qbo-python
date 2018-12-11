@@ -45,8 +45,11 @@ cols_we_want = {
 
 
 def all_cust_df(colmap=cols_we_want):
+
     
     df = pd.read_csv(csvin,header=1)
+
+    df = df.loc[ df['ID'].notna()]
 
     df = df.filter(items=colmap.keys())
 
@@ -60,6 +63,8 @@ def all_cust_df(colmap=cols_we_want):
 def active_cust_df(colmap=cols_we_want):
 
     df = pd.read_csv(csvin,header=1)
+
+    df = df.loc[ df['ID'].notna()]
 
     df = df.loc[df['STATUS'] == 'ACTIVE']
 

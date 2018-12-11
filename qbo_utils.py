@@ -170,7 +170,7 @@ def makeStripePayment(customer,stripeinfo):
 
     payment['TotalAmt'] = payment['UnappliedAmt'] = stripeinfo['amount']
 
-    payment['PaymentRefNum'] = stripeinfo['paymentref']
+    payment['PaymentRefNum'] = stripeinfo['id']
     
     payment['TxnDate'] = stripeinfo['transaction_date']
     

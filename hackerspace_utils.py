@@ -76,3 +76,24 @@ def active_cust_df(colmap=cols_we_want):
 
     return(df)
 
+
+
+
+
+memberships={
+
+    "REGULAR" : {
+        "amount" : 35.00,
+        "itemid" : 24
+    },
+
+
+    "STUDENT":  {
+        "amount": 25.00
+        ,"itemid" : 25
+
+    }
+
+
+    }
+

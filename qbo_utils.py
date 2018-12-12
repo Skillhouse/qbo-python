@@ -13,8 +13,13 @@ from operator import itemgetter
 
 from quickbooks import Oauth2SessionManager
 from quickbooks import QuickBooks
-from quickbooks.objects.customer import Customer
+from quickbooks.batch import batch_create
 from quickbooks.objects import Account
+from quickbooks.objects import Invoice
+from quickbooks.objects import Item
+from quickbooks.objects.customer import Customer
+from quickbooks.objects.detailline import *
+
 
 
 debug = False
@@ -52,13 +57,32 @@ def build_something(bag,fieldlist):
 def build_cust( bag ) :
     return build_something(bag,custfields)
 
-def build_invoice(bag):
-    thing = blankinvoice
 
-    thing['Line'][0]['Amount'] = bag['amount']
-    thing['CustomerRef']['value'] = int(bag['customer'])
 
-    return(thing)
+
+def build_invoice(items,custobj,memberrow,thedate):
+
+    membership = hu.memberships[memberrow['type']]
+
+    item =items[items['id']==membership['itemid']].iloc[0]['obj']
+        
+    sild = SalesItemLineDetail()
+    sild.ItemRef = item.to_ref()
+        
+    aline = SalesItemLine()
+    aline.SalesItemLineDetail=sild
+    aline.Amount= membership['amount']
+       
+        
+    temp = Invoice()
+    temp.Line.append(aline)
+    temp.TotalAmt = membership['amount']
+
+    temp.CustomerRef = custobj.to_ref()
+
+    temp.TxnDate = thedate.date().isoformat()
+
+    return temp
 
 
 

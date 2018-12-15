@@ -23,6 +23,8 @@ from quickbooks.objects.detailline import *
 
 
 debug = False
+doit  = False
+
 
 
 authbag = hu.get_auth_bag()

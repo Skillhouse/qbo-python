@@ -188,7 +188,6 @@ blankpurchase = {
 
 
 def makeStripePayment(customer,stripeinfo):
-    import pdb; pdb.set_trace()
 
     payment = copy.deepcopy(blankpayment);
 

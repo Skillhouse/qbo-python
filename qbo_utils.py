@@ -347,7 +347,8 @@ def record_purchase(amount,src,dest,tdate,custref,description,docnum):
     
     item['TxnDate'] = tdate.isoformat()
 
-
+    item['DocNumber'] = docnum
+    
     payload = json.dumps(item,indent=4,sort_keys=True)
 
 

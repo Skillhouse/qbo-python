@@ -195,9 +195,9 @@ def makeStripePayment(customer,stripeinfo):
 
     payment['TotalAmt'] = payment['UnappliedAmt'] = stripeinfo['amount']
 
-    payment['PaymentRefNum'] = stripeinfo['id']
+    payment['PaymentRefNum'] = stripeinfo['id'][-21:]  # ARRRGH
     
-    payment['TxnDate'] = stripeinfo['transaction_date']
+    payment['TxnDate'] = stripeinfo['transaction_date'].date().isoformat()
     
     return payment
     

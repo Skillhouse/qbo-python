@@ -294,7 +294,6 @@ def record_transfer(amount,src,dest,tdate):
     
     payload = json.dumps(transfer,indent=4,sort_keys=True)
 
-    print(payload)
 
     import pdb; pdb.set_trace()
     
@@ -394,7 +393,6 @@ def record_invoice(custrow):
 
     payload = json.dumps(invoice,indent=4,sort_keys=True)
 
-    print(payload)
     
     headers = {
         'Accept': "application/json",

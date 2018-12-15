@@ -263,16 +263,17 @@ def record_payment(payment):
     resj={}
 
     if (debug):
-        print(payload)
+        print("# payment: {PaymentRefNum}".format(**payment))
         
-    else: 
+    if(doit):
         response = requests.request("POST", url, data=payload, headers=headers, params=querystring)
-
         resj = json.loads(response.text);
 
-    if("Fault" in resj):
-        print(json.dumps(resj,sort_keys=True,indent=4))
-        raise(Exception("Failed to add payment"))
+        if("Fault" in resj):
+            print(json.dumps(resj,sort_keys=True,indent=4))
+            raise(Exception("Failed to add payment"))
+    else:
+        print("# Not recording payment (doit)")
 
     return resj
     
@@ -304,18 +305,26 @@ def record_transfer(amount,src,dest,tdate):
         'Cache-Control': "no-cache",
     }
 
-    response = requests.request("POST", url, data=payload, headers=headers, params=querystring)
 
-    resj = json.loads(response.text);
+    if (debug): print(payload)
 
-    if("Fault" in resj):
-        print(json.dumps(resj,sort_keys=True,indent=4))
-        raise(Exception("Failed to record transfer"))
+    resj = {}
+
+    if (doit):
+
+        response = requests.request("POST", url, data=payload, headers=headers, params=querystring)
+        resj = json.loads(response.text);
+
+        if("Fault" in resj):
+            print(json.dumps(resj,sort_keys=True,indent=4))
+            raise(Exception("Failed to record transfer"))
+    else:
+            print("# Not recording transfer (doit)")
 
     return resj
 
 
-def record_purchase(amount,src,dest,tdate,custref,description):
+def record_purchase(amount,src,dest,tdate,custref,description,docnum):
 
     # Purchases are _us_ buying things, we're spending money. 
 
@@ -355,15 +364,20 @@ def record_purchase(amount,src,dest,tdate,custref,description):
     resj={}
 
     if (debug): 
-        print(payload)
-    else:    
+        print("# Purchase: {0}  ".format(item['Line'][0]['Description']))
+
+    if (doit):
         response = requests.request("POST", url, data=payload, headers=headers, params=querystring)
         resj = json.loads(response.text);
 
-    if("Fault" in resj):
-        print(json.dumps(resj,sort_keys=True,indent=4))
-        raise(Exception("Failed to record purchase"))
+        if("Fault" in resj):
+            print(json.dumps(resj,sort_keys=True,indent=4))
+            raise(Exception("Failed to record purchase"))
+    else:
+        print("#  Not recording purchase (doit)")
 
+
+        
     return resj
 
 
@@ -389,14 +403,21 @@ def record_invoice(custrow):
         'Cache-Control': "no-cache",
     }
 
-    response = requests.request("POST", url, data=payload, headers=headers, params=querystring)
 
-    resj = json.loads(response.text);
+    resj = {}
 
-    if("Fault" in resj):
-        print(json.dumps(resj,sort_keys=True,indent=4))
-        raise(Exception("Failed to add invoice"))
+    if (debug): print(payload)
 
+    if (doit):
+        response = requests.request("POST", url, data=payload, headers=headers, params=querystring)
+        resj = json.loads(response.text);
+
+        if("Fault" in resj):
+            print(json.dumps(resj,sort_keys=True,indent=4))
+            raise(Exception("Failed to add invoice"))
+    else:
+        print("# Not recording invoice (doit)")
+        
     return resj
     
 def create_cust(custrow):

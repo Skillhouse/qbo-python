@@ -5,6 +5,8 @@ import re;
 import pandas as pd;
 
 
+debug = False
+
 # What accounts do payments get recorded into?
 payment_config="./payment_processing.json"
 
@@ -61,7 +63,8 @@ def all_cust_df(colmap=cols_we_want):
 
 
 def active_cust_df(colmap=cols_we_want):
-
+    if (debug): print("# Reading active customers")
+    
     df = pd.read_csv(csvin,header=1)
 
     df = df.loc[ df['ID'].notna()]

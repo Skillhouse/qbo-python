@@ -41,6 +41,8 @@ from datetime import date
 cols_we_want = {
     "QBO ID"        : "QBOID",
     "Name"          : "name",
+    "TYPE"          : "type",
+    "STATUS"        : "status",
     "Email"         : 'email',
     "Phone Number"  : 'phone',
     "Stripe ID"     : 'stripe_id',
@@ -48,10 +50,62 @@ cols_we_want = {
 
 all_cust = hu.all_cust_df(cols_we_want)
 
+all_cust['email'] = all_cust['email'].str.lower()
+
+
+
+
 
 stripe.api_key = hu.get_auth_bag()['stripe_keys']['live']
 
+plans = {
+    'REGULAR' : 'reg2014',
+    'STUDENT' : 'foo',
 
+    }
+
+
+def desired_subscription(cust):
+    # Interpret our spreadsheet, picking a plan
+    # based on our data.
+
+    if (cust['status'] != 'ACTIVE'):
+        return None
+
+    return plans[cust['type']]
+    
+
+
+def compare_notes(ourdata,stripedata):
+
+    ourdict = ourdata.to_dict('records')[0]
+
+    if(stripedata['email'] == ourdict['email']):
+        if (debug): print("#  Emails match ")
+    else:
+        ourdict['stripemail'] = stripedata['email']
+        print("#  Emails differ; ours:({email}) stripe:({stripemail}) ".format(**ourdict))
+
+
+        
+    ourdict['oursub']    = desired_subscription(ourdict)
+    ourdict['stripesubs'] = [sub['plan']['id'] for sub in stripedata['subscriptions']['data'] ]
+
+    ourdict['sss'] = ",".join(ourdict['stripesubs'])
+    
+    if(debug):
+        print ("#  type: {type} ({oursub}); stripe has: {sss}".format(**ourdict) )
+
+    if (( (ourdict['oursub'] is None  ) and ( len(ourdict['stripesubs']) == 0))  or
+        ( ourdict['oursub'] in ourdict['stripesubs']) ):
+        # All good
+        if (debug): print("#  That's a match.")
+    else:
+        print("#  {email} should have sub '{oursub}'; has '{sss}'. ".format(**ourdict))
+        
+    
+      
+    
 
 def main():
 
@@ -65,7 +119,6 @@ def main():
         if (debug): print("# customer '{id}' ({email})".format(**customer))
 
         customer['email'] = customer['email'].lower()
-        all_cust['email'] = all_cust['email'].str.lower()
 
         found = {}
     
@@ -74,12 +127,18 @@ def main():
             pcount +=1 ;
             print("ERR: No sheets reference for ID '{id}' ".format(**customer))
         else:
-                if (debug): print("  Found stripe ID. ".format(**customer))
+                if (debug): print("#  Found stripe ID. ".format(**customer))
                 found['id'] = all_cust[all_cust['stripe_id']==customer['id']].index.values.tolist()
                 if (len(found['id']) > 1):
                     pcount +=1 
                     print("ERR: multiple matches for ID {1}. ({0}) ".format(",".join(str(x) for x in found['id']),customer['id']))
+                else:
+                    # OK, now we've got a single match.  
+                    compare_notes( all_cust[all_cust['stripe_id']==customer['id']],customer)
+                
 
+
+                    
         
         if not (customer['email'] in all_cust['email'].values):
             print("ERR: No sheets reference for email '{email}' ".format(**customer))
@@ -104,7 +163,9 @@ def main():
             print(found)
             print("   Desired:  {email} matched with {id}".format(**customer))
 
-    
+
+
+            
         #import pdb; pdb.set_trace()
 
 

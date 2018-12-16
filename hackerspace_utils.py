@@ -59,6 +59,9 @@ def all_cust_df(colmap=cols_we_want):
 
     df = df.fillna("")
 
+    df['QBOID'] = df['QBOID'].astype(int)
+
+    
     return(df)
 
 
@@ -76,6 +79,8 @@ def active_cust_df(colmap=cols_we_want):
     df = df.rename(axis="columns",mapper=colmap)                    
 
     df = df.fillna("")
+
+    df['QBOID'] = df['QBOID'].astype(int)
 
     return(df)
 

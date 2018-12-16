@@ -13,6 +13,13 @@ Usage:
 Options:
   --debug                  Print debugging output. [default: False]
 
+
+  --doit                   Actually modify QBO data.  Otherwise, is a no-op.  [default: False]
+  --nobatch                DO NOT send in batches.   [default: False]
+  --batchsize=<SIZE>       Size of batches to send   [default: 8]
+
+
+
 """
 
 
@@ -93,14 +100,6 @@ def cust_iterable():
             yielded += 1
             yield(item)
     
-
-
-
-
-
-
-
-
 
 
 

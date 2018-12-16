@@ -31,6 +31,34 @@ authbag = hu.get_auth_bag()
 Token = authbag['token'];
 
 
+
+session_manager = None
+qbo_client = None
+
+
+
+def open_qbo_client():
+    global session_manager
+    global qbo_client
+    
+    authbag = hu.get_auth_bag()
+
+    session_manager = Oauth2SessionManager(
+        client_id=authbag['realm'],
+        client_secret=authbag['secret'],
+        access_token=authbag['token'],
+        base_url=authbag['redirect'],
+    )
+
+    qbo_client = QuickBooks(
+        sandbox=True,
+        session_manager=session_manager,
+        company_id=authbag['realm']
+    )
+
+    return qbo_client
+
+
 custfields = {
     'name'      :  lambda d,v: d.update({'DisplayName':v}) ,
     'phone'     :  lambda d,v: d.update({'PrimaryPhone': {'FreeFormNumber': v}}) ,
@@ -38,6 +66,30 @@ custfields = {
     'QBOID'     :  lambda d,v: d ,   # No place in object
     'stripe_id' :  lambda d,v: d ,   # No place in object
 }
+
+
+
+def cust_iterable(**kwargs):
+    reps = 0
+    yielded = 0
+    
+    while (True):
+        
+        customers = Customer.filter(
+            qb=qbo_client,
+            max_results=100,
+            start_position=yielded+1,
+            **kwargs
+        )
+        reps += 1
+
+        if len(customers) == 0:
+            return
+
+        for item in customers:
+
+            yielded += 1
+            yield(item)
 
 
 blankcustomer = {}

@@ -27,7 +27,7 @@ Options:
   --description=<DESC>     Override description on the invoice(s). 
 
 
-  --doit                   Actually send the invoices.  Otherwise, is a no-op.  [default: False]
+  --doit                   Actually send the invoices.  Otherwise, is a no-op. [default: False]
   --nobatch                DO NOT send in batches.   [default: False]
   --batchsize=<SIZE>       Size of batches to send   [default: 8]
 
@@ -144,10 +144,12 @@ def main():
     thedate = arguments['--date']
 
     itemlist = pd.DataFrame([ { 'obj':item , 'desc': item.Description , 'id': int(item.Id)}  for item in  Item.filter(qb=client) ])  
-   
+
     qbolist = pd.DataFrame([ { 'obj':cust , 'id': int(cust.Id)}  for cust in cust_iterable() ])  
 
 
+    import pdb; pdb.set_trace()
+    
 #    import pdb; pdb.set_trace()
     if ( arguments['--custid'] != -1 ):
         if (debug):
@@ -170,17 +172,11 @@ def main():
 
         cust =qbolist[qbolist['id']==int(row['QBOID'])].iloc[0]['obj']
 
-        membership =itemlist[itemlist['id']==24].iloc[0]['obj']
-
-
         myinv = qu.build_invoice(itemlist,cust,row,thedate)
-
-
         
         if(not (arguments['--description'] is None)):
             myinv.CustomerMemo = {'value': arguments['--description']}
 
-            
         myinv.TxnDate = arguments['--date'].date().isoformat()
         
         print(display_invoice(myinv))
@@ -225,14 +221,18 @@ if __name__ == '__main__':
         arguments['--date'] = dateparser.parse(arguments['--date'])
 
 
-    if ( not arguments['--doit'] ) :
+    if (arguments['--doit'] ) :
+        qu.doit =True;
+    else: 
         print("\n Not saving invoices.  Specify '--doit' or get a no-op\n")
 
         
-    if (debug): hu.debug = True; qu.debug=True
+    if (debug):
+        hu.debug = True;
+        qu.debug=True
+        print(arguments)
 
-    if (doit):  qu.doit =True;
 
-    if (debug): print(arguments)
+
 
     main()

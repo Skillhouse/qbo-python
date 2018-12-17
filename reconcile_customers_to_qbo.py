@@ -116,9 +116,9 @@ def forward():
 
         ccount += 1
         changes = False
+
         
-        
-        if (row['QBOID'] == "" ):
+        if (row['QBOID'] == 0 ):
             print("Sheet has no QBO ID for {name}".format(**row))
 
             found_candidate = False

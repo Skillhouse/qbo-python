@@ -54,12 +54,13 @@ def all_cust_df(colmap=cols_we_want):
     df = df.loc[ df['ID'].notna()]
 
     df = df.filter(items=colmap.keys())
-
+    
+    df["QBO ID"] = df["QBO ID"].fillna(0).astype(int)
+    
     df = df.rename(axis="columns",mapper=colmap)                    
 
-    df = df.fillna("")
 
-    df['QBOID'] = df['QBOID'].astype(int)
+    df = df.fillna("")
 
     
     return(df)

@@ -139,13 +139,13 @@ def forward():
                 print("Candidates exist; not adding.")
             else:
                 pcount += 1
-            if(arguments['--doit']):
+                if(arguments['--doit']):
                     print("No prospective match.  Adding. ")
                     thisj = qu.build_cust(row)
                     new = Customer.from_json(thisj)
                     newer = new.save(qb=qbo_client)
-                    print(display_cust(newer)+" (QBO: {0})".format(newer.Id) )
-            else:
+                    print("# New QBO: {0}".format(newer.Id) )
+                else:
                     print("#  Not adding, because you said not to (no --doit)")
                     
                     

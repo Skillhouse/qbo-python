@@ -233,11 +233,12 @@ if __name__ == '__main__':
     arguments['--starting'] = parse( arguments['--starting'])
     arguments['--ending'] = parse( arguments['--ending'])
 
-    if (debug): qu.debug=True; hu.debug = True
 
     if (doit):  qu.doit =True;
-    
 
-    if (debug): print(arguments)
+    if (debug):
+        qu.debug=True;
+        hu.debug = True
+        print(arguments)
 
     main()

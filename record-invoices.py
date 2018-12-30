@@ -29,7 +29,7 @@ Options:
 
   --doit                   Actually send the invoices.  Otherwise, is a no-op. [default: False]
   --nobatch                DO NOT send in batches.   [default: False]
-  --batchsize=<SIZE>       Size of batches to send   [default: 8]
+  --batchsize=<SIZE>       Size of batches to send   [default: 10]
 
 """
 

@@ -298,7 +298,7 @@ def addInvoicesToPaymentUntilYouChoke(payment):
 
 
 def record_payment(payment):
-    url = "https://sandbox-quickbooks.api.intuit.com/v3/company/123146047051614/payment"
+    url = authbag['apiurl']
     querystring = {"minorversion":"14"}
 
     payload = json.dumps(payment,indent=4,sort_keys=True)
@@ -313,7 +313,7 @@ def record_payment(payment):
 
     resj={}
 
-    if (debug):
+    if (debug) :
         print("# payment: {PaymentRefNum}".format(**payment))
         
     if(doit):
@@ -332,7 +332,8 @@ def record_payment(payment):
 
 
 def record_transfer(amount,src,dest,tdate):
-    url = "https://sandbox-quickbooks.api.intuit.com/v3/company/123146047051614/transfer"
+    url = authbag['apiurl']
+
     querystring = {"minorversion":"14"}
 
 
@@ -346,8 +347,7 @@ def record_transfer(amount,src,dest,tdate):
     payload = json.dumps(transfer,indent=4,sort_keys=True)
 
 
-    import pdb; pdb.set_trace()
-    
+   
     headers = {
         'Accept': "application/json",
         'Content-Type': "application/json",
@@ -378,7 +378,7 @@ def record_purchase(amount,src,dest,tdate,custref,description,docnum):
 
     # Purchases are _us_ buying things, we're spending money. 
 
-    url = "https://sandbox-quickbooks.api.intuit.com/v3/company/123146047051614/purchase"
+    url = authbag['apiurl']
     querystring = {"minorversion":"14"}
 
 
@@ -403,7 +403,7 @@ def record_purchase(amount,src,dest,tdate,custref,description,docnum):
     
     payload = json.dumps(item,indent=4,sort_keys=True)
 
-
+    if (False and debug): print(payload)
    
     headers = {
         'Accept': "application/json",
@@ -436,7 +436,7 @@ def record_purchase(amount,src,dest,tdate,custref,description,docnum):
 
 def record_invoice(custrow):
     
-    url = "https://sandbox-quickbooks.api.intuit.com/v3/company/123146047051614/invoice"
+    url = authbag['apiurl']
     querystring = {"minorversion":"14"}
 
     print(blankinvoice)
@@ -472,7 +472,7 @@ def record_invoice(custrow):
     
 def create_cust(custrow):
 
-    url = "https://sandbox-quickbooks.api.intuit.com/v3/company/123146047051614/customer"
+    url = authbag['apiurl']
     querystring = {"minorversion":"14"}
 
     newcust = build_cust(custrow)
@@ -504,7 +504,8 @@ def update_customer_name(id,name):
 
     sync = int(before['Customer']['SyncToken'])
 
-    url = "https://sandbox-quickbooks.api.intuit.com/v3/company/123146047051614/customer"
+    url = authbag['apiurl']
+
     querystring = {"minorversion":"14"}
 
     newcust = {
@@ -535,7 +536,7 @@ def update_customer_name(id,name):
 
 def get_cust(id):
 
-    url = "https://sandbox-quickbooks.api.intuit.com/v3/company/123146047051614/customer/{0}".format(id)
+    url = authbag['apiurl']
 
     querystring = {"minorversion":"14"}
 
@@ -564,7 +565,7 @@ def get_cust(id):
 
 def query(sql):
 
-    url = "https://sandbox-quickbooks.api.intuit.com/v3/company/123146047051614/query"
+    url = authbag['apiurl']
     
     querystring = {"minorversion":"14"}
 

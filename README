@@ -19,3 +19,10 @@ we can do double entry, but ... why?... BECAUSE THAT'S WHAT ACCOUNTING
 IS ABOUT?
 
 Anyway.  I figured I owed you a readme. Here 'tis.
+
+
++ You need a bank-style account (I used type bank, detail savings) to
+hold the momentary balance at your payment processor.
+
++ You probably want a specific service type for your membership funds.
+

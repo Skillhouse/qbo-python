@@ -35,12 +35,20 @@ empty_cache = {
 
 
 
-def get_auth_bag():
+def get_auth_bag_without_cache():
     with open(secrets) as authfile:
         bag1 = json.load(authfile)
 
     return(bag1)
-    
+
+def get_auth_bag():
+    with open(secrets) as authfile:
+        bag1 = json.load(authfile)
+
+    bag1.update(get_bearer_cache())
+        
+    return(bag1)
+
 
 
 

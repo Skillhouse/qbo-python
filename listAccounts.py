@@ -50,7 +50,7 @@ distillate = { x['Id']:
 # print (json.dumps(distillate,sort_keys=True,indent=4))
 # print ( ("{DisplayName}".format(**x) for x in distillate.values
 
-print( "\n".join("{id},{type},{name}".format(**item)+"\n" for item in distillate.values()))
+print( "\n".join("{id},{type},{name}".format(**item) for item in distillate.values()))
 
 
 

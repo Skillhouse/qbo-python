@@ -28,7 +28,7 @@
         function refreshCall() {
             $("#result").html('Loading...')
             $.get("/sampleappoauth2/refreshTokenCall", function (data) {
-                $("#result").html(JSON.stringify(data, null, 2))
+                $("#result").html(JSON.stringify(data,  Object.keys(data).sort() , 2))
             })
         }
 

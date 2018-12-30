@@ -1,4 +1,5 @@
 
+import copy
 import os
 import json
 import re;
@@ -15,29 +16,43 @@ def get_paymentconfig():
         return json.load(cfgfile)
 
 
+
 # Out of the repo, natch.
+
+
 secrets="../hackerspace-auth.json"
+cache="../bearer-cache.json"
+
+empty_cache = {
+    'empty_cache' : True,
+    'token' : "No token here",
+    'refresh_token': "No refresh token here",
+    'token_expires':   time.time(),
+    'refresh_expires': time.time(),
+    'token_expires_h':   "No token here",
+    'refresh_expires_h': "No refresh token here",
+}
+
+
 
 def get_auth_bag():
-    bag1 = ""
     with open(secrets) as authfile:
         bag1 = json.load(authfile)
-
-    cache = get_bearer_cache()
-
-    bag1.update(cache)
 
     return(bag1)
     
 
 
-cache="../bearer-cache.json"
 
 def get_bearer_cache(fail_ood=True):
     tempcache = ""
-    with open(cache) as infile:
-        tempcache= json.load(infile)
 
+    if os.path.isfile(cache):
+        with open(cache) as infile:
+            tempcache= json.load(infile)
+    else:
+        tempcache = copy.deepcopy(empty_cache)
+        # Set it already expired if the file is missing.
 
     secs_still_good = tempcache['token_expires'] - time.time()
 
@@ -49,8 +64,8 @@ def get_bearer_cache(fail_ood=True):
     return(tempcache)
 
 
-def dump_bearer_cache(bearin,cacheout=cache):
-    with open(cacheout,"w") as outfile:
+def dump_bearer_cache(bearin,filename=cache):
+    with open(filename,"w") as outfile:
         os.environ['TZ'] = 'EST+05EDT,M4.1.0,M10.5.0'
         time.tzset()
         json.dump(

@@ -69,8 +69,15 @@ def getBearerTokenFromRefreshToken(refresh_Token):
 
 def main():
 
-    authbag = hu.get_bearer_cache(fail_ood=False)
+    authbag = hu.get_auth_bag()
 
+    tempcache = hu.get_bearer_cache(fail_ood=False)
+
+    if tempcache['empty_cache'] is True:
+        tempcache = {} 
+
+    authbag.update(tempcache)
+        
     newbearer = getBearerTokenFromRefreshToken(authbag['refresh_token'])
     
     hu.dump_bearer_cache(newbearer)

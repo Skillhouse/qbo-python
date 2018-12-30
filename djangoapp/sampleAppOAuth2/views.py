@@ -17,6 +17,15 @@ from sampleAppOAuth2.services import (
 )
 
 
+# Ick; back-graft hackerspace bits into the django app.
+import sys
+import os
+dotdot = os.path.join(settings.BASE_DIR,"../");
+sys.path.insert(0, dotdot)
+import hackerspace_utils as hu
+# End of ick.  
+
+
 def index(request):
     return render(request, 'index.html')
 
@@ -63,6 +72,9 @@ def authCodeHandler(request):
         return HttpResponseBadRequest()
 
     bearer = getBearerToken(auth_code)
+
+    hu.dump_bearer_cache(bearer,settings.CACHEFILE)
+
     realmId = request.GET.get('realmId', None)
     updateSession(request, bearer.accessToken, bearer.refreshToken, realmId)
 
@@ -90,6 +102,9 @@ def connected(request):
             # if call to User Profile Service doesn't succeed then get a new bearer token from refresh token
             # and try again
             bearer = getBearerTokenFromRefreshToken(refresh_token)
+
+            hu.dump_bearer_cache(bearer,settings.CACHEFILE)
+
             user_profile_response, status_code = getUserProfile(bearer.accessToken)
             updateSession(request, bearer.accessToken, bearer.refreshToken, request.session.get('realmId', None),
                           name=user_profile_response.get('givenName', None))
@@ -133,6 +148,8 @@ def refreshTokenCall(request):
         return HttpResponse('Not authorized')
     bearer = getBearerTokenFromRefreshToken(refresh_token)
 
+    hu.dump_bearer_cache(bearer,settings.CACHEFILE)
+
     if isinstance(bearer, str):
         return HttpResponse(bearer)
     else:
@@ -154,6 +171,9 @@ def apiCall(request):
     if status_code >= 400:
         # if call to QBO doesn't succeed then get a new bearer token from refresh token and try again
         bearer = getBearerTokenFromRefreshToken(refresh_token)
+
+        hu.dump_bearer_cache(bearer,settings.CACHEFILE)
+
         updateSession(request, bearer.accessToken, bearer.refreshToken, realmId)
         company_info_response, status_code = getCompanyInfo(bearer.accessToken, realmId)
         if status_code >= 400:

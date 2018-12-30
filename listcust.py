@@ -29,27 +29,10 @@ from quickbooks.objects.customer import Customer
 from quickbooks.objects import Account
 
 
-authbag = hu.get_auth_bag()
-
-
-
-session_manager = Oauth2SessionManager(
-    client_id=authbag['realm'],
-    client_secret=authbag['secret'],
-    access_token=authbag['token'],
-    base_url=authbag['redirect'],
-)
-
-
-client = QuickBooks(
-     sandbox=True,
-     session_manager=session_manager,
-     company_id=authbag['realm']
- )
-
+qbo_client = None
+session_manager = None
 
 def cust_iterable():
-
     bitesize = 100
     reps=0
     yielded = 0
@@ -57,7 +40,7 @@ def cust_iterable():
     while (True):
 
         customers = Customer.filter(Active=True,
-                                    qb=client,
+                                    qb=qbo_client,
                                     max_results=bitesize,
                                     start_position=yielded+1)
         reps += 1
@@ -71,9 +54,25 @@ def cust_iterable():
     
 
 
-
 def main():
+    global session_manager
+    global qbo_client
 
+    authbag = hu.get_auth_bag()
+
+    session_manager = Oauth2SessionManager(
+        client_id=authbag['realm'],
+        client_secret=authbag['secret'],
+        access_token=authbag['token'],
+        refresh_token=authbag['refresh_token'],
+        base_url=authbag['redirect'],
+    )
+
+    qbo_client = QuickBooks(
+        sandbox=True,
+        session_manager=session_manager,
+        company_id=authbag['realm']
+    )
     
     for customer in cust_iterable():
 
@@ -86,8 +85,6 @@ def main():
 
         print("{Id},{DisplayName},{email}".format(**cd))
         
-    
-    
 
 
 if __name__ == '__main__':
@@ -95,8 +92,9 @@ if __name__ == '__main__':
 
     debug = arguments['--debug']
 
-#    if (debug): api_functions.debug=True
-    if (debug): print(arguments)
+    if (debug):
+        print(arguments)
+        hu.debug=True
 
     main()
 

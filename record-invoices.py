@@ -65,47 +65,8 @@ subset = hu.active_cust_df(cols_we_want)
 
 authbag = hu.get_auth_bag()
 
-session_manager = Oauth2SessionManager(
-    client_id=authbag['realm'],
-    client_secret=authbag['secret'],
-    access_token=authbag['token'],
-    base_url=authbag['redirect'],
-)
-
-client = QuickBooks(
-     sandbox=True,
-     session_manager=session_manager,
-     company_id=authbag['realm']
- )
-
-
-def cust_iterable():
-
-    bitesize = 100
-    reps=0
-    yielded = 0
-    
-    while (True):
-
-        customers = Customer.filter(Active=True,
-                                    qb=client,
-                                    max_results=bitesize,
-                                    start_position=yielded+1)
-        reps += 1
-
-        if len(customers) == 0:
-            return
-
-        for item in customers:
-            yielded += 1
-            yield(item)
-    
-
-
 def make_invoice():
     pass
-
-
 
 
 def display_invoice(inv):
@@ -121,12 +82,10 @@ def display_invoice(inv):
     return fmt.format(**bag)
 
 
-
-
-def do_batch(thebatch):
+def do_batch(thebatch,qbo_client):
     if(debug):
         print("Batch create..")
-    results = batch_create(thebatch,qb=client)
+    results = batch_create(thebatch,qb=qbo_client)
                     
     if (len(results.faults) > 0):
         print("Invoice submission errors...")
@@ -140,17 +99,18 @@ def do_batch(thebatch):
 
 def main():
     global subset
+
+    qbo_client = qu.open_qbo_client()
+
+
     
     thedate = arguments['--date']
 
-    itemlist = pd.DataFrame([ { 'obj':item , 'desc': item.Description , 'id': int(item.Id)}  for item in  Item.filter(qb=client) ])  
+    itemlist = pd.DataFrame([ { 'obj':item , 'desc': item.Description , 'id': int(item.Id)}  for item in  Item.filter(qb=qbo_client) ])  
 
-    qbolist = pd.DataFrame([ { 'obj':cust , 'id': int(cust.Id)}  for cust in cust_iterable() ])  
+    qbolist = pd.DataFrame([ { 'obj':cust , 'id': int(cust.Id)}  for cust in qu.cust_iterable(Active=True) ])  
 
 
-    import pdb; pdb.set_trace()
-    
-#    import pdb; pdb.set_trace()
     if ( arguments['--custid'] != -1 ):
         if (debug):
             print("# Custid '{0}' specified. ".format(arguments['--custid']))
@@ -167,7 +127,8 @@ def main():
 
     batch = []
 
-    
+    count = 0
+
     for index, row in subset.iterrows():
 
         cust =qbolist[qbolist['id']==int(row['QBOID'])].iloc[0]['obj']
@@ -180,25 +141,24 @@ def main():
         myinv.TxnDate = arguments['--date'].date().isoformat()
         
         print(display_invoice(myinv))
-
+        count += 1
 
         if (arguments['--doit']):
             if ( arguments['--nobatch'] ) :
-                myinv = myinv.save(qb=client)
+                myinv = myinv.save(qb=qbo_client)
             else:
                 batch.append(myinv)
-
                 if (len(batch) >= arguments['--batchsize']):
-                    results = do_batch(batch)
+                    results = do_batch(batch,qbo_client)
                     batch = []
 
         else:
             print ("# Not saving")
 
     if ( len(batch) > 0  and arguments['--doit'] ):
-        results = do_batch(batch)
+        results = do_batch(batch,qbo_client)
 
-
+    print(" Found {0} invoices to submit. ".format(count))
 
             
 

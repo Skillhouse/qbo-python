@@ -1,0 +1,22 @@
+
+
+
+* Connect to a company (sandbox example):
+
+We want all the secret bits out of the repo. 
+
+
+The file locations are named in 'hackerspace_utils.py';
+
+You'll need 
+
+hackerspace-auth.json
+
+which will need to have 
+ [
+ Which of the values are necessary to get started?
+
+]
+
+
+and hackerspace-auth is also referenced in the django settings.py

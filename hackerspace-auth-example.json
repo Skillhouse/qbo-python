@@ -1,6 +1,30 @@
 
 {
-    
+    "Comment": " This file specifies the expected facts in the auth dict",
+
     "token" : "No this is not my QBO token. Copy this file to .., rename it so it no longer says -example, and put your token in place of this string.  "
 
+    "auth_code"     :"Not sure what this one means, but writing it down anyway ",
+    
+    "refresh_token" :"for renewing the access token",
+    
+    "client": "Oauth2 client ID",
+
+    "secret": "Oauth2 client secret",
+
+    "redirect":  "A redirect value from the list of valid redirects defined for your app",
+
+    "realm_id": "company ID; stating it twice because two different code bases use it. Clumsy, yeah.",
+
+    "realm":    "And again",
+
+    "apiurl":   "https://sandbox-quickbooks.api.intuit.com/v3/company/123146047051614/transfer",
+    
+ 
+    "stripe_keys": {
+	"live": "Live  key",
+	"test": "Test API key",
+    }
+
 }
+

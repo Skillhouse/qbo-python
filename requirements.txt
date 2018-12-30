@@ -1,3 +1,5 @@
+Django==1.10
+PyYAML==3.13
 atomicwrites==1.2.1
 attrs==18.2.0
 certifi==2018.11.29
@@ -10,6 +12,7 @@ enum34==1.1.6
 future==0.17.1
 idna==2.7
 intuit-oauth==1.0.2
+jose==1.0.0
 mock==2.0.0
 more-itertools==4.3.0
 numpy==1.15.4
@@ -22,18 +25,17 @@ pluggy==0.8.0
 py==1.7.0
 pyasn1==0.4.4
 pycparser==2.18
-pytest==4.0.1
 pytest-cov==2.6.0
+pytest==4.0.1
 python-coveralls==2.9.1
 python-dateutil==2.7.5
 python-jose==3.0.1
 python-quickbooks==0.7.5
 pytz==2018.7
-PyYAML==3.13
 rauth==0.7.3
 regex==2018.11.22
-requests==2.20.1
 requests-oauthlib==1.0.0
+requests==2.20.1
 rsa==4.0
 simplejson==3.16.0
 six==1.11.0

@@ -47,6 +47,7 @@ def open_qbo_client():
         client_id=authbag['realm'],
         client_secret=authbag['secret'],
         access_token=authbag['token'],
+        refresh_token=authbag['refresh_token'],
         base_url=authbag['redirect'],
     )
 

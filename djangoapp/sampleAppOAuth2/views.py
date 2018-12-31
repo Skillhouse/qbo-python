@@ -73,11 +73,13 @@ def authCodeHandler(request):
 
     bearer = getBearerToken(auth_code)
 
-    hu.dump_bearer_cache(bearer,settings.CACHEFILE)
+    hu.dump_bearer_cache(bearer,filename=settings.CACHEFILE)
 
     realmId = request.GET.get('realmId', None)
     updateSession(request, bearer.accessToken, bearer.refreshToken, realmId)
 
+    hu.add_realm_to_bearer_cache(realmId,filename=settings.CACHEFILE)
+    
     # Validate JWT tokens only for OpenID scope
     if bearer.idToken is not None:
         if not validateJWTToken(bearer.idToken):
@@ -104,7 +106,10 @@ def connected(request):
             bearer = getBearerTokenFromRefreshToken(refresh_token)
 
             hu.dump_bearer_cache(bearer,settings.CACHEFILE)
+            realmId = request.session['realmId']
+            hu.add_realm_to_bearer_cache(realmId,filename=settings.CACHEFILE)
 
+            
             user_profile_response, status_code = getUserProfile(bearer.accessToken)
             updateSession(request, bearer.accessToken, bearer.refreshToken, request.session.get('realmId', None),
                           name=user_profile_response.get('givenName', None))
@@ -149,6 +154,8 @@ def refreshTokenCall(request):
     bearer = getBearerTokenFromRefreshToken(refresh_token)
 
     hu.dump_bearer_cache(bearer,settings.CACHEFILE)
+    realmId = request.session['realmId']
+    hu.add_realm_to_bearer_cache(realmId,filename=settings.CACHEFILE)
 
     if isinstance(bearer, str):
         return HttpResponse(bearer)
@@ -173,6 +180,8 @@ def apiCall(request):
         bearer = getBearerTokenFromRefreshToken(refresh_token)
 
         hu.dump_bearer_cache(bearer,settings.CACHEFILE)
+        realmId = request.session['realmId']
+        hu.add_realm_to_bearer_cache(realmId,filename=settings.CACHEFILE)
 
         updateSession(request, bearer.accessToken, bearer.refreshToken, realmId)
         company_info_response, status_code = getCompanyInfo(bearer.accessToken, realmId)

@@ -110,8 +110,18 @@ def build_something(bag,fieldlist):
 
 
 def build_cust( bag ) :
-    return build_something(bag,custfields)
+    thing = {}
 
+    thing['DisplayName'] = bag['name']
+
+    if 'phone' in bag and (not bag['phone'] is None) and (bag['phone'] != ''):
+        thing['PrimaryPhone'] =  {'FreeFormNumber': bag['phone']}
+
+    if 'email' in bag and (not bag['email'] is None) and (bag['email'] != ''):
+        thing['PrimaryEmailAddr'] =  {'Address': bag['email']}
+
+    return thing
+                                                        
 
 
 

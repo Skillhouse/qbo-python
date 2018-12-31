@@ -91,7 +91,19 @@ def dump_bearer_cache(bearin,filename=cache):
             sort_keys=True,
             )
    
-    
+
+def add_realm_to_bearer_cache(realm,filename=cache):
+    with open(filename) as infile:
+        tempcache= json.load(infile)
+
+    tempcache['realm'] = tempcache['realm_id'] = realm
+
+    with open(filename,"w") as outfile :
+        json.dump(tempcache,outfile,indent=4,sort_keys=True)
+
+
+
+        
 stripepat = re.compile(r"^stripe: *(?P<custid>.+)$",re.MULTILINE)
     
 def extract_stripecust_from_notes(innotes):

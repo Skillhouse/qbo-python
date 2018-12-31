@@ -97,6 +97,12 @@ def dump_bearer_cache(bearin,filename=cache):
             indent=4,
             sort_keys=True,
             )
+
+def dump_authfile(bagin,filename=secrets):
+    with open(filename,"w") as outfile:
+        os.environ['TZ'] = 'EST+05EDT,M4.1.0,M10.5.0'
+        time.tzset()
+        json.dump( bagin, outfile, indent=4, sort_keys=True, )
    
 
 def add_realm_to_bearer_cache(realm,filename=cache):

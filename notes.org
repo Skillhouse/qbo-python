@@ -1,6 +1,9 @@
 
 
 
+
+
+
 * Connect to a company (sandbox example):
 
 We want all the secret bits out of the repo. 
@@ -35,3 +38,48 @@ Set client ID and secret
 Set the redirect to http://localhost:8000/sampleappoauth2/authCodeHandler
 
 This should let you hit the app, authenticate, connect, and write the cache.
+
+
+
+* Connect to a company (Production example)
+
+
+You need a proper HTTPS URI for the redirect.
+
+
+https://fool-quicken-about-localhost.local:8000/sampleappoauth2/authCodeHandler
+
+
+QBO doesn't want you doing this to localhost.  Why? Dunno.
+
+127.0.1.1	fool-quicken-about-localhost.local 
+
+Then you can run the django app in SSL mode:
+
+./manage.py runsslserver
+
+so the URI will resolve. 
+
+
+# cp hackerspace-prod-auth-example.json  ../hackerspace-auth.json
+
+Set the stripe keys. 
+
+Set the client ID and secret.
+
+In settings:
+
++ set redirect_uri to be https.
++ set the urls not to have sandbox. 
+
+Now go to the QBO OAUTH2 playground.
+
+Walk through the connection and get-keys process with them.
+
+Copy the realm, refresh token, access token, and auth code into the auth.json
+
+And...  You're in.
+
+Woot?
+
+

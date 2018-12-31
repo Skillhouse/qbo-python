@@ -9,6 +9,11 @@
 	"fee_account"  : 281
     }
 
+    "bank": {
+	"payment_account" : 322,
+	"fee_account" : 323
+    }
+    
 }
 
 

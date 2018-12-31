@@ -15,8 +15,23 @@ hackerspace-auth.json
 which will need to have 
  [
  Which of the values are necessary to get started?
+ ]
 
-]
+
+Hackerspace-auth is also referenced in the django settings.py
 
 
-and hackerspace-auth is also referenced in the django settings.py
+** OK, step by step:
+
+
+# cp hackerspace-auth-example.json ../hackerspace-auth.json
+
+
+Set stripe keys.
+
+
+Set client ID and secret
+
+Set the redirect to http://localhost:8000/sampleappoauth2/authCodeHandler
+
+This should let you hit the app, authenticate, connect, and write the cache.

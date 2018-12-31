@@ -73,7 +73,7 @@ def main():
 
     tempcache = hu.get_bearer_cache(fail_ood=False)
 
-    if tempcache['empty_cache'] is True:
+    if 'empty_cache' in tempcache:
         tempcache = {} 
 
     authbag.update(tempcache)

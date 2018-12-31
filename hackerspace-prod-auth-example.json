@@ -1,0 +1,23 @@
+
+{
+    "Comment": " This file specifies the expected facts in the auth dict",
+    "apiurl": "https://quickbooks.api.intuit.com/v3/company/123146047051614/",
+    "apiurl_pattern": "https://quickbooks.api.intuit.com/v3/company/{realm}/",
+    "auth_code": "Not sure what this one means, but writing it down anyway ",
+    "client": "[client ID]",
+    "realm": "[realm]",
+    "realm_id": "[realm]",
+    "redirect": "https://localhost:8000/sampleappoauth2/authCodeHandler",
+    "refresh_token": "reftok",
+    "refresh_expires": 1554924659.8508387,
+    "refresh_expires_h": "Wed Apr 10 15:30:59 2019",
+    "secret": "[client secret]",
+    "stripe_keys": {
+	"live": "sk_live_",
+        "test": "sk_test_"
+    },
+    "token": "[token]",
+    "token_expires": 1546222933.8508346,
+    "token_expires_h": "Sun Dec 30 21:22:13 2018"
+
+}

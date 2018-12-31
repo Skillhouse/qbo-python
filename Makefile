@@ -1,8 +1,5 @@
 
-CACHE=./reportcache
-
-
-REPORTS=memberlist.csv qbolist.csv
+SHELL=/bin/bash
 
 VE=./qbo-venv
 VEACT=${VE}/bin/activate
@@ -20,14 +17,29 @@ ${VEACT}:
 
 
 
+
+
+CACHE=./reportcache
+
+
+REPORTS=memberlist.csv qbolist.csv
+
+REPORTFILES=$(addprefix ${CACHE}/,${REPORTS})
+
+reports: ${REPORTFILES}
+
+cleanreports:
+	rm ${REPORTFILES}
+
+
 ${CACHE}/memberlist.csv:  ../memberlist.csv
 	cp $< $@
 
-
 ${CACHE}/qbolist.csv:
 	(\
-	source 
+	source ${VEACT} ;\
 	./listcustomers.py | sort -k1 -n > $@  \
 	)
+
 
 

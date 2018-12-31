@@ -69,7 +69,7 @@ def main():
     )
 
     qbo_client = QuickBooks(
-        sandbox=True,
+#        sandbox=True,
         session_manager=session_manager,
         company_id=authbag['realm']
     )

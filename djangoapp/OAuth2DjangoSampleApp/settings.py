@@ -127,7 +127,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "static"), ]
 
 # OAuth specific variables
-DISCOVERY_DOCUMENT = 'https://developer.api.intuit.com/.well-known/openid_sandbox_configuration/'
+DISCOVERY_DOCUMENT = 'https://developer.api.intuit.com/.well-known/openid_configuration/'
 
 secrets   = os.path.join(BASE_DIR,"../../hackerspace-auth.json");
 CACHEFILE = os.path.join(BASE_DIR,"../../bearer-cache.json");

@@ -46,9 +46,16 @@ def get_auth_bag():
         bag1 = json.load(authfile)
 
     bag1.update(get_bearer_cache())
+
+    format_apiurl(bag1)
         
     return(bag1)
 
+
+def format_apiurl(authbag):
+    authbag['apiurl'] = authbag['apiurl_pattern'] .format(**authbag)
+
+    
 
 
 

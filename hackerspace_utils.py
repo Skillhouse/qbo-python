@@ -52,11 +52,11 @@ def get_auth_bag():
 
 
 
-def get_bearer_cache(fail_ood=True):
+def get_bearer_cache(fail_ood=True,filename=cache):
     tempcache = ""
 
-    if os.path.isfile(cache):
-        with open(cache) as infile:
+    if os.path.isfile(filename):
+        with open(filename) as infile:
             tempcache= json.load(infile)
     else:
         tempcache = copy.deepcopy(empty_cache)

@@ -139,11 +139,11 @@ CLIENT_ID = secrets['client']
 CLIENT_SECRET = secrets['secret']
 
 
-REDIRECT_URI = 'http://localhost:8000/sampleappoauth2/authCodeHandler'
+REDIRECT_URI = 'https://localhost:8000/sampleappoauth2/authCodeHandler'
 ACCOUNTING_SCOPE = 'com.intuit.quickbooks.accounting'
 OPENID_SCOPES = ['openid', 'profile', 'email', 'phone', 'address']
 GET_APP_SCOPES = ['com.intuit.quickbooks.accounting', 'openid', 'profile', 'email', 'phone', 'address']
-SANDBOX_QBO_BASEURL = 'https://sandbox-quickbooks.api.intuit.com'
-SANDBOX_PROFILE_URL = 'https://sandbox-accounts.platform.intuit.com/v1/openid_connect/userinfo'
+SANDBOX_QBO_BASEURL = 'https://quickbooks.api.intuit.com'
+SANDBOX_PROFILE_URL = 'https://accounts.platform.intuit.com/v1/openid_connect/userinfo'
 ID_TOKEN_ISSUER = 'https://oauth.platform.intuit.com/op/v1'
  

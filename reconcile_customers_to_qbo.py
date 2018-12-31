@@ -47,6 +47,8 @@ import qbo_utils as qu
 # Get data from the spreadsheet download
 
 cols_we_want = {
+    "ID"            : "SHEETID",
+    "username"      : "username",
     "QBO ID"        : "QBOID",
     "Name"          : "name",
     "Email"         : 'email',

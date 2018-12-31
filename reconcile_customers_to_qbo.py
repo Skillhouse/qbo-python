@@ -14,10 +14,8 @@ Options:
 
 
   --doit                   Actually modify QBO data.  Otherwise, is a no-op.  [default: False]
-
-
-  --qboid <id[,id...]>     Reconcile specified comma-delimited IDs. 
-
+  --qboid <id[,id...]>     Reconcile specified comma-delimited QBOIDs. 
+  --sheetid <id[,id...]>   Reconcile specified comma-delimited Google Sheets IDs. 
 
 """
 
@@ -92,10 +90,14 @@ def cust2bag(cust):
 def forward():
 
     all_cust = hu.all_cust_df(cols_we_want)
-
+    all_cust['SHEETID'] = all_cust['SHEETID'].astype(int)
+    
+   
     if (arguments['--qboid']):
         all_cust = all_cust[all_cust['QBOID'].isin(arguments['--qboid'])]
-
+    
+    if (arguments['--sheetid']):
+        all_cust = all_cust[all_cust['SHEETID'].isin(arguments['--sheetid'])]
 
     # Connect to  QBO, and get the current list from them.
     
@@ -224,6 +226,9 @@ if __name__ == '__main__':
 
     if (arguments['--qboid']):
         arguments['--qboid'] = [ int(x) for x in arguments['--qboid'].split(",")]
+
+    if (arguments['--sheetid']):
+        arguments['--sheetid'] = [ int(x) for x in arguments['--sheetid'].split(",")]
  
     
     if (debug):

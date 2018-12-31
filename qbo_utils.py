@@ -299,7 +299,8 @@ def addInvoicesToPaymentUntilYouChoke(payment):
 
 
 def record_payment(payment):
-    url = authbag['apiurl']
+
+    url = "/".join([authbag['apiurl'],"payment"])
     querystring = {"minorversion":"14"}
 
     payload = json.dumps(payment,indent=4,sort_keys=True)
@@ -333,7 +334,8 @@ def record_payment(payment):
 
 
 def record_transfer(amount,src,dest,tdate):
-    url = authbag['apiurl']
+
+    url = "/".join([authbag['apiurl'],"transfer"])
 
     querystring = {"minorversion":"14"}
 
@@ -379,7 +381,7 @@ def record_purchase(amount,src,dest,tdate,custref,description,docnum):
 
     # Purchases are _us_ buying things, we're spending money. 
 
-    url = authbag['apiurl']
+    url = "/".join([authbag['apiurl'],"purchase"])
     querystring = {"minorversion":"14"}
 
 
@@ -437,7 +439,7 @@ def record_purchase(amount,src,dest,tdate,custref,description,docnum):
 
 def record_invoice(custrow):
     
-    url = authbag['apiurl']
+    url = "/".join([authbag['apiurl'],"invoice"])
     querystring = {"minorversion":"14"}
 
     print(blankinvoice)
@@ -473,7 +475,7 @@ def record_invoice(custrow):
     
 def create_cust(custrow):
 
-    url = authbag['apiurl']
+    url = "/".join([authbag['apiurl'],"customer"])
     querystring = {"minorversion":"14"}
 
     newcust = build_cust(custrow)
@@ -505,7 +507,7 @@ def update_customer_name(id,name):
 
     sync = int(before['Customer']['SyncToken'])
 
-    url = authbag['apiurl']
+    url = "/".join([authbag['apiurl'],"customer"])
 
     querystring = {"minorversion":"14"}
 
@@ -537,7 +539,7 @@ def update_customer_name(id,name):
 
 def get_cust(id):
 
-    url = authbag['apiurl']
+    url = "/".join([authbag['apiurl'],"customer"])
 
     querystring = {"minorversion":"14"}
 
@@ -566,7 +568,7 @@ def get_cust(id):
 
 def query(sql):
 
-    url = authbag['apiurl']
+    url = "/".join([authbag['apiurl'],"query"])
     
     querystring = {"minorversion":"14"}
 

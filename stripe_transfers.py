@@ -104,9 +104,8 @@ def main():
     src_acct_id  = hu.get_paymentconfig()['stripe']['payment_account']
     dest_acct_id = hu.get_paymentconfig()['bank']['payment_account']
 
-    
     transfers = stripe.Transfer.list(limit=20,
-                                 created= {
+                                 date= {
                                      'gte' : int(arguments['--starting'].timestamp()),
                                      'lte': int(arguments['--ending'].timestamp())
                                  },

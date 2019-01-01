@@ -7,11 +7,11 @@
     "default" :{
 	"payment_account" : 58,
 	"fee_account"  : 7
-    }
+    },
 
     "bank": {
-	"payment_account" : 10,
-	"fee_account" : 7
+	"payment_account" : 44,
+	"fee_account" : 5
     }
     
 }

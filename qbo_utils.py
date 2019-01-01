@@ -343,7 +343,7 @@ def record_payment(payment):
 
 
 
-def record_transfer(amount,src,dest,tdate):
+def record_transfer(amount,src,dest,tdate,docid):
 
     url = "/".join([authbag['apiurl'],"transfer"])
 
@@ -356,6 +356,7 @@ def record_transfer(amount,src,dest,tdate):
     transfer['ToAccountRef']['value'] = int(dest)
     transfer['FromAccountRef']['value'] = int(src)
     transfer['TxnDate'] = tdate.isoformat()
+    transfer['PrivateNote'] = docid
     
     payload = json.dumps(transfer,indent=4,sort_keys=True)
 

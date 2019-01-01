@@ -83,6 +83,13 @@ And...  You're in.
 Woot?
 
 
+Now you need to update everyone's QBO IDs so they match the new universe.
+ reconcile_customers_to_qbo.py will help.
+Then you neet to update the account IDs in the payment config so they match the new universe.
+ listaccounts.py will help.
+Then you need to update the memberships data in hackerspace_utils so they match the new universe.
+ listitems.py will help.
+
 
 
 * Experimenting with payment applications.

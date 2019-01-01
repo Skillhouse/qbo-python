@@ -1,0 +1,3 @@
+# A place to stick some transient files, useful for cli lookup.
+*
+!.gitignore

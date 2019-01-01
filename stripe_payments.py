@@ -119,7 +119,7 @@ def main():
         "Stripe ID"     : 'stripe_id',
     }
 
-    customers =  hu.active_cust_df(cols_we_want)
+    customers =  hu.all_cust_df(cols_we_want)
 
 
     stripe.api_key = hu.get_auth_bag()['stripe_keys']['live']

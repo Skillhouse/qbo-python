@@ -83,3 +83,19 @@ And...  You're in.
 Woot?
 
 
+
+
+* Experimenting with payment applications.
+
+140:  months 9,10,11,12
+
+Went to match a payment, found a pledge 9/1;
+
+Match again 9/27: matched 10/1
+
+10/27: matched 11/1
+
+
+The account of assignment should be the A/R account, not just revenue.
+
+

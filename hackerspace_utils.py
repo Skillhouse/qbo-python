@@ -5,6 +5,7 @@ import json
 import re;
 import pandas as pd;
 import time;
+from datetime import datetime;
 
 debug = False
 
@@ -200,3 +201,9 @@ memberships={
 
     }
 
+
+
+
+
+def dayify(instamp):
+    return datetime(instamp.year,instamp.month,instamp.day)

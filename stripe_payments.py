@@ -33,8 +33,10 @@ import pandas as pd;
 import sys
 import time
 import stripe;
+import datetime
 from datetime import date,datetime,timedelta
 from dateutil.parser import parse
+import dateparser
 
 from quickbooks import Oauth2SessionManager
 from quickbooks import QuickBooks
@@ -229,9 +231,12 @@ if __name__ == '__main__':
     debug = arguments['--debug']
     doit = arguments['--doit']
 
-    
-    arguments['--starting'] = parse( arguments['--starting'])
-    arguments['--ending'] = parse( arguments['--ending'])
+    if ( arguments['--starting'] == "the first" ) :
+        arguments['--starting'] = hu.dayify(dateparser.parse("{0} days ago".format(dateparser.parse("today").day -1 )))
+    else:
+        arguments['--starting'] = hu.dayify(dateparser.parse(arguments['--starting']))
+
+    arguments['--ending'] = hu.dayify(dateparser.parse( arguments['--ending']))
 
 
     if (doit):  qu.doit =True;

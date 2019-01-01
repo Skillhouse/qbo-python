@@ -188,13 +188,13 @@ memberships={
 
     "REGULAR" : {
         "amount" : 35.00,
-        "itemid" : 34
+        "itemid" : 4
     },
 
 
     "STUDENT":  {
         "amount": 25.00
-        ,"itemid" : 34
+        ,"itemid" : 5
 
     }
 

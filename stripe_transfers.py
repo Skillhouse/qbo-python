@@ -33,8 +33,8 @@ import pandas as pd;
 import sys
 import time
 import stripe;
+import datetime
 from datetime import date,datetime,timedelta
-# from dateutil.parser import parse
 import dateparser
 
 from quickbooks import Oauth2SessionManager
@@ -42,7 +42,6 @@ from quickbooks import QuickBooks
 from quickbooks.objects.customer import Customer
 from quickbooks.objects import Account
 from quickbooks.objects import Invoice
-from quickbooks.objects import Payment
 from quickbooks.objects import Transfer
 from quickbooks.objects import Item
 from quickbooks.batch import batch_create
@@ -157,12 +156,15 @@ if __name__ == '__main__':
     doit = arguments['--doit']
 
     if ( arguments['--starting'] == "the first" ) :
-        arguments['--starting'] = dateparser.parse("{0} days ago".format(dateparser.parse("today").day -1 ))
+        arguments['--starting'] = hu.dayify(dateparser.parse("{0} days ago".format(dateparser.parse("today").day -1 )))
     else:
-        arguments['--starting'] = dateparser.parse(arguments['--starting'])
+        arguments['--starting'] = hu.dayify(dateparser.parse(arguments['--starting']))
 
-    arguments['--ending'] = dateparser.parse( arguments['--ending'])
+    arguments['--ending'] = hu.dayify(dateparser.parse( arguments['--ending']))
 
+    
+
+    
 
     if (doit):  qu.doit =True;
 

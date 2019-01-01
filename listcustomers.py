@@ -75,6 +75,7 @@ def customer2row(inv):
         'DisplayName'   : inv.DisplayName,
         'email'         : "" if inv.PrimaryEmailAddr is None else inv.PrimaryEmailAddr.Address,
         'Id'            : inv.Id,
+        'cust'          : inv
     }
     return(bag)
     

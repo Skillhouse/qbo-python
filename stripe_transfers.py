@@ -1,21 +1,21 @@
 #!/usr/bin/env python 
-"""record_stripe_payments
+"""record_stripe_transfers
 
-Read our payments from Stripe, and apply them to Quickbooks.
+Read our transfers from Stripe, and apply them to Quickbooks.
 
 
 Usage:
-  record_stripe_payments [options]
+  record_stripe_transfers [options]
   
 
 
 Options:
   --debug                  Print debugging output. [default: False]
-  --starting=<DATE>        Process payments on or after this date. [default: the first]
-  --ending=<DATE>          Process payments on or after this date. [default: today]
+  --starting=<DATE>        Process transfers on or after this date. [default: the first]
+  --ending=<DATE>          Process transfers before this date. [default: today]
 
 
-  --doit                   Actually commit the payment records.  Otherwise, is a no-op.  [default: False]
+  --doit                   Actually commit the transfer records.  Otherwise, is a no-op.  [default: False]
   --nobatch                DO NOT send in batches.   [default: False]
   --batchsize=<SIZE>       Size of batches to send   [default: 8]
 

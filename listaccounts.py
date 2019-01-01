@@ -90,6 +90,9 @@ def main():
         print("No matches for your query: \n---\n{0}\n---\n".format(whereclause))
         sys.exit()
 
+    pd.set_option('display.max_columns', 10)
+    pd.set_option('display.width', 1000)
+
     ilist['Id'] = ilist['Id'].astype(int)
     print(ilist)
 

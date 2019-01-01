@@ -22,7 +22,7 @@ ${VEACT}:
 CACHE=./reportcache
 
 
-REPORTS=memberlist.csv qbolist.csv
+REPORTS=memberlist.csv qbolist.csv accountlist
 
 REPORTFILES=$(addprefix ${CACHE}/,${REPORTS})
 
@@ -39,6 +39,12 @@ ${CACHE}/qbolist.csv:
 	(\
 	source ${VEACT} ;\
 	./listcustomers.py | sort -k1 -n > $@  \
+	)
+
+${CACHE}/accountlist:
+	(\
+	source ${VEACT} ;\
+	./listaccounts.py > $@  \
 	)
 
 

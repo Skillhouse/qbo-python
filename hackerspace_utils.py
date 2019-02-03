@@ -148,11 +148,12 @@ def all_cust_df(colmap=cols_we_want):
 
     df = df.loc[ df['ID'].notna()]
 
-    df = df.filter(items=colmap.keys())
-    
     df["QBO ID"] = df["QBO ID"].fillna(0).astype(int)
-    
-    df = df.rename(axis="columns",mapper=colmap)                    
+
+
+    if not (colmap is None):
+        df = df.filter(items=colmap.keys())
+        df = df.rename(axis="columns",mapper=colmap)                    
 
 
     df = df.fillna("")
@@ -170,9 +171,9 @@ def active_cust_df(colmap=cols_we_want):
 
     df = df.loc[df['STATUS'] == 'ACTIVE']
 
-    df = df.filter(items=colmap.keys())
-
-    df = df.rename(axis="columns",mapper=colmap)                    
+    if not (colmap is None):
+        df = df.filter(items=colmap.keys())
+        df = df.rename(axis="columns",mapper=colmap)                    
 
     df = df.fillna("")
 

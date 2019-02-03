@@ -60,8 +60,7 @@ stripe.api_key = hu.get_auth_bag()['stripe_keys']['live']
 
 plans = {
     'REGULAR' : 'reg2014',
-    'STUDENT' : 'foo',
-
+    'STUDENT' : 'studmem',
     }
 
 

@@ -175,7 +175,8 @@ def main():
     if ( len(batch) > 0  and arguments['--doit'] ):
         results = do_batch(batch,qbo_client)
 
-    print(" Found {0} invoices to submit. ".format(count))
+    print(" Found {0} invoices to submit, ".format(count))
+    print(" Totalling ${0:.2f} ".format(total_amount))
 
             
 

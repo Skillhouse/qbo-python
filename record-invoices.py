@@ -26,6 +26,8 @@ Options:
   --amount=<AMT>           Override amount of the invoice(s).
   --description=<DESC>     Override description on the invoice(s). 
 
+  --inactive               Permit assigning invoices to inactive customers [default: False]
+
 
   --doit                   Actually send the invoices.  Otherwise, is a no-op. [default: False]
   --nobatch                DO NOT send in batches.   [default: False]
@@ -99,7 +101,14 @@ def do_batch(thebatch,qbo_client):
 
 def main():
     global subset
+    total_amount = 0
+    
+    if (arguments['--inactive']):
+        subset = hu.all_cust_df(cols_we_want)
+    else:
+        subset = hu.active_cust_df(cols_we_want)
 
+        
     qbo_client = qu.open_qbo_client()
 
 

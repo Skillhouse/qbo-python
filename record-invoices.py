@@ -61,9 +61,8 @@ cols_we_want = {
     "Email"         : 'email',
     "Phone Number"  : 'phone',
     "TYPE"          : 'type',
+    "Join Date"     : 'joindate',
 }
-
-subset = hu.active_cust_df(cols_we_want)
 
 authbag = hu.get_auth_bag()
 
@@ -142,11 +141,20 @@ def main():
 
         cust =qbolist[qbolist['id']==int(row['QBOID'])].iloc[0]['obj']
 
+        if(debug): print("# Processing {name} ".format(**row))
+        
+        if ( arguments['--date'].date() < dateparser.parse(row['joindate']).date() ):
+            # Is the date of before this person joined?
+            print("# Invoice date precedes member join date; skipping.")
+            continue
+
         myinv = qu.build_invoice(itemlist,cust,row,thedate)
         
         if(not (arguments['--description'] is None)):
             myinv.CustomerMemo = {'value': arguments['--description']}
 
+        total_amount += myinv.TotalAmt
+            
         myinv.TxnDate = arguments['--date'].date().isoformat()
         
         print(display_invoice(myinv))

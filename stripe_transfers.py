@@ -11,7 +11,7 @@ Usage:
 
 Options:
   --debug                  Print debugging output. [default: False]
-  --starting=<DATE>        Process transfers on or after this date. [default: the first]
+  --starting=<DATE>        Process transfers on or after this date. [default: 45 days ago]
   --ending=<DATE>          Process transfers before this date. [default: today]
 
 

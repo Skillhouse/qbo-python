@@ -106,3 +106,92 @@ Match again 9/27: matched 10/1
 The account of assignment should be the A/R account, not just revenue.
 
 
+
+
+* Monthly  (or more frequent) procedure:
+
+** Update QBO tokens.
+
+./cli_refresh.py
+
+** Reconcile member list with QBO:
+
+1.  Re-download the Definitive Membership List: Download as CSV.
+1.  Move it to ../memberlist.csv
+1.  run ./reconcile_customers_to_qbo.py
+    1. Might have to correct data in the spreadsheet.
+    1. Might have to update QBO (probably with --doit argument)
+    1. If you have to add people to QBO with --doit, you'll need to then add their QBO IDs to the spreadsheet.
+   
+1. Maybe repeat this process several times, until 
+
+Evaluated '[some number of]' customers.
+Found '0' problems.
+
+** Reconcile member list with Stripe:
+
+1. run ./reconcile_customers_to_stripe.py
+    1. might need to backfill stripe IDs.  If you do, then re-download the csv. 
+
+    1. might need to change subscriptions.  But touch base with the
+       customers before adding subscriptions back.
+1. repeat until
+
+Evaluated '[some number of]' customers.
+Found '0' problems.
+
+
+** If this is your monthly run, record invoices for the month.
+
+1. Have they already been recorded?  Run ./listinvoices.py; that will
+   check to see if invoices have been run since the first of the
+   month.
+
+1. run ./record-invoices.py; This will tell you how many invoices we
+   think we ought to be sending.  
+
+   This number ought to be just like 
+   
+   ./validate_customer_data.py  | grep Active | wc -l 
+
+1. remember that number.  Joe will ask. 
+
+1. run ./record-invoices.py --doit; invoices are recorded.
+
+1. run ./listinvoices.py again, to see that the world has changed. 
+
+
+**  Apply Stripe transactions.
+
+1. ./stripe_payments.py will evaluate payments for the last 45 days.
+   If this is getting done more or less monthly, expect a bolus of
+   already-processed payments towards the end.  This is fine.
+
+1. ./stripe_payments.py --doit  to record those. 
+
+
+1. ./stripe_transfers.py will evaluate transfers ("payouts") for the
+   last 45 days. Again, if it's happening monthly-ish, there'll be
+   some which were already processed.
+
+   Reasonable to crossreference to the display in Stripe proper. 
+
+1. ./stripe_transfers.py --doit to record. 
+
+
+
+** Account for Paypal transactions.
+
+This is a little more intricate.  Some of the names of our paypal
+payees are not identical with the names we've got for them.  You
+essentially have to crossreference the paypal records to the records
+inside the QBO interface, and then assign them to a member.
+
+Could Eventually Be Automated....
+
+
+** Transfer paypal dollars.
+
+If there's any substanital pp balance, get it the hell out of there.
+
+

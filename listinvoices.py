@@ -12,7 +12,7 @@ Options:
   --debug                  Print debugging output. [default: False]
 
   --starting=<DATE>        Invoices on or after this date. [default: the first]
-  --ending=<DATE>          Invoices before (NOT on) this date. [default: today]
+  --ending=<DATE>          Invoices before or on this date. [default: today]
 
   --custid <id[,id...]>    List for specified QBO IDs. 
 
@@ -96,7 +96,7 @@ def main():
 
     sqlbits = [];
     sqlbits.append("TxnDate >= '{--starting}'".format(**arguments))
-    sqlbits.append("TxnDate < '{--ending}' ".format(**arguments))
+    sqlbits.append("TxnDate <= '{--ending}' ".format(**arguments))
        
     if not arguments['--custid'] is None:
         custs = "CustomerRef in (" + ",".join("'{0}'".format(str(i)) for i in arguments['--custid']) + ")"

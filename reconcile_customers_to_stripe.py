@@ -71,6 +71,11 @@ def desired_subscription(cust):
     if (cust['status'] != 'ACTIVE'):
         return None
 
+    if (cust['email'] == 'eddie@reidehome.com'):
+        # If we get more than a few of these, they should really
+        # be a column in the database.
+        return None
+    
     return plans[cust['type']]
     
 

@@ -220,7 +220,7 @@ def main():
         
 
 
-        time.sleep(0.3)
+        time.sleep(0.1)
    
 
     

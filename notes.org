@@ -118,6 +118,11 @@ The account of assignment should be the A/R account, not just revenue.
 
 1.  Re-download the Definitive Membership List: Download as CSV.
 1.  Move it to ../memberlist.csv
+
+I do:
+
+mv -f  /home/asr/Downloads/Definitive\ Membership\ List\ -\ MasterMemberList.csv ../memberlist.csv
+
 1.  run ./reconcile_customers_to_qbo.py
     1. Might have to correct data in the spreadsheet.
     1. Might have to update QBO (probably with --doit argument)

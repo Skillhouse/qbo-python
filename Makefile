@@ -17,6 +17,8 @@ ${VEACT}:
 
 
 
+grab:
+	mv -f  /home/asr/Downloads/Definitive\ Membership\ List\ -\ MasterMemberList.csv ../memberlist.csv
 
 
 CACHE=./reportcache

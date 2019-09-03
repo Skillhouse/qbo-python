@@ -76,6 +76,12 @@ def desired_subscription(cust):
         # If we get more than a few of these, they should really
         # be a column in the database.
         return None
+
+    if (cust['auto_style'] == 'No'):
+        # Here's a column in the database.
+        return None
+
+
     
     return plans[cust['type']]
     

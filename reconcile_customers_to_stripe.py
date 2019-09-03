@@ -77,7 +77,7 @@ def desired_subscription(cust):
         # be a column in the database.
         return None
 
-    if (cust['auto_style'] == 'No'):
+    if (cust['auto_style'] != 'Stripe'):
         # Here's a column in the database.
         return None
 

@@ -39,13 +39,14 @@ from datetime import date
 
 
 cols_we_want = {
-    "QBO ID"        : "QBOID",
-    "Name"          : "name",
-    "TYPE"          : "type",
-    "STATUS"        : "status",
-    "Email"         : 'email',
-    "Phone Number"  : 'phone',
-    "Stripe ID"     : 'stripe_id',
+    "QBO ID"             : "QBOID",
+    "Name"               : "name",
+    "TYPE"               : "type",
+    "STATUS"             : "status",
+    "Email"              : 'email',
+    "Phone Number"       : 'phone',
+    "Stripe ID"          : 'stripe_id',
+    "Automatic payments" : 'auto_style',
 }
 
 all_cust = hu.all_cust_df(cols_we_want)

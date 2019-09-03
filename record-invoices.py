@@ -141,7 +141,7 @@ def main():
 
         cust =qbolist[qbolist['id']==int(row['QBOID'])].iloc[0]['obj']
 
-        if(debug): print("# Processing {name} ".format(**row))
+        print("# Processing {name} ".format(**row))
         
         if ( arguments['--date'].date() < dateparser.parse(row['joindate']).date() ):
             # Is the date of before this person joined?

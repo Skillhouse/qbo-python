@@ -103,6 +103,11 @@ def compare_notes(ourdata,stripedata):
     ourdict['stripesubs'] = [sub['plan']['id'] for sub in stripedata['subscriptions']['data'] ]
 
     ourdict['sss'] = ",".join(ourdict['stripesubs'])
+
+    if  ( len(ourdict['sss']) > 0 ) and (ourdict['auto_style'] != 'Stripe' ):
+        print("#  {email} has subscriptions, but Auto style '{auto_style}' is not 'Stripe'".format(**ourdict))
+
+
     
     if(debug):
         print ("#  type: {type} ({oursub}); stripe has: {sss}".format(**ourdict) )

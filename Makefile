@@ -7,7 +7,7 @@ VEACT=${VE}/bin/activate
 virtualenv: ${VEACT}
 
 ${VEACT}:
-	python3 -m virtualenv ${VE}
+	python3 -m venv ${VE}
 	( \
 	source ${VEACT} ; \
 	pip install --upgrade pip ; \

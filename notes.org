@@ -2,6 +2,14 @@
 
 
 
+* New installation.
+
+This was done on ubuntu 19.10
+
++ Make sure you have python3 virtual environment and dev stuff..
+
+
+apt-get install python3-venv  python3-all-dev
 
 
 * Connect to a company (sandbox example):

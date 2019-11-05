@@ -121,6 +121,10 @@ The account of assignment should be the A/R account, not just revenue.
 
 I do:
 
+make grab
+
+which executes something like:
+
 mv -f  /home/asr/Downloads/Definitive\ Membership\ List\ -\ MasterMemberList.csv ../memberlist.csv
 
 1.  run ./reconcile_customers_to_qbo.py
@@ -200,3 +204,9 @@ Could Eventually Be Automated....
 If there's any substanital pp balance, get it the hell out of there.
 
 
+
+
+| started                | Finished               | Invoices |   |   |   |
+|------------------------+------------------------+----------+---+---+---|
+| [2019-11-05 Tue 15:05] | [2019-11-05 Tue 16:44] |       73 |   |   |   |
+|                        |                        |          |   |   |   |

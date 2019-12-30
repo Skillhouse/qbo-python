@@ -217,4 +217,4 @@ If there's any substanital pp balance, get it the hell out of there.
 | started                | Finished               | Invoices |   |   |   |
 |------------------------+------------------------+----------+---+---+---|
 | [2019-11-05 Tue 15:05] | [2019-11-05 Tue 16:44] |       73 |   |   |   |
-|                        |                        |          |   |   |   |
+| [2019-12-30 Mon 14:34] |                        |       73 |   |   |   |
